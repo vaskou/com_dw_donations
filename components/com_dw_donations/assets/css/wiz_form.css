@@ -1,0 +1,91 @@
+fieldset.amnt.uk-form-large{
+	height: 40px;
+	padding: 5px;
+	font-size: 15px;
+}
+fieldset.amnt > label{
+	display:inline-block;
+	padding:10px 5px;
+}
+.amnt-changer{
+/* 	display: inline-block;
+	vertical-align: top;
+	width: 60px;
+	margin-right: 5px;
+	text-align:center;
+//	margin-top:-4px; */
+}
+.amnt-value{
+/* 	float: left;
+	width: 40px !important;
+//	height: 33px;
+	text-align: center */
+}
+.amnt-button.uk-icon-button{
+/* 	text-align:center;
+	padding:0;
+	position: relative;
+	float: right;
+	width: 20px;
+	height: 20px;
+	border: 1px solid #c2c9d0;
+	color: #c2c9d0;
+	font-size: 13px;
+	line-height: 15px;
+	cursor: pointer;
+	background: #fff;
+	border-radius:0; */
+/*	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	user-select: none;*/
+}
+.amnt-button.uk-icon-button:hover:disabled{
+	/* color: #c2c9d0; */
+}
+
+.uk-form .amnt input[type=radio]{
+/* 	width:18px;
+	height:18px; */
+}
+.uk-form .amnt input[type=radio]:checked:before{
+/* 	width:12px;
+	height:12px; */
+}
+
+#ngo_list.uk-table td{
+	/* vertical-align:middle; */
+}
+#ngo_list.uk-table tr{
+	border-bottom:1px solid #ccc;	
+}
+#ngo_list.uk-table tr:first-child{
+	border-top:1px solid #ccc;
+}
+#ngo_list .ngo-row{
+	cursor:pointer;
+}
+
+#ngo_list .ngo-row:hover .ngoName{
+	padding-right:20px;
+	color:#e5097f;
+}
+
+.invalid{
+	border-color: #dc8d99 !important;
+	background: #fff7f8 !important;
+	color: #c91032 !important;
+}
+.uk-pagination .active a{
+	background:#e5097f;
+	color:#fff;
+}
+
+
+@media (max-width:479px){
+#ngo_list td{
+	display:inline-block;
+	text-align:center !important;
+}
+}

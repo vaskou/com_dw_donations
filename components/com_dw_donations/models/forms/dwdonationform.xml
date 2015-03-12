@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset>
+        <field name="objective" type="dwobjectivefilter" default="0" label="COM_DW_DONATIONS_FORM_LBL_OBJECTIVE" />
+        <field name="actionarea" type="dwactionareafilter" default="0" label="COM_DW_DONATIONS_FORM_LBL_ACTIONAREA" />
+		
+        <field name="id" type="hidden" default="0" label="COM_DW_DONATIONS_FORM_LBL_DONATION_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" />
+        <field name="created_by" type="dwcreatedby" default="" 
+            label="COM_DW_DONATIONS_FORM_LBL_DONATION_CREATED_BY"
+            description="COM_DW_DONATIONS_FORM_DESC_DONATION_CREATED_BY"  />
+        <field name="created" type="timecreated" default="" 
+            label="COM_DW_DONATIONS_FORM_LBL_DONATION_CREATED"
+            description="COM_DW_DONATIONS_FORM_DESC_DONATION_CREATED"  hidden="true" />
+        <field name="modified" type="timeupdated" default="" 
+            label="COM_DW_DONATIONS_FORM_LBL_DONATION_MODIFIED"
+            description="COM_DW_DONATIONS_FORM_DESC_DONATION_MODIFIED"  hidden="true" />
+		<field name="donor_id" type="dwcreatedby" default=""/>
+        <field name="beneficiary_id" type="hidden" default="" />
+        <field name="fname" type="text"     
+            label="COM_DW_DONATIONS_FORM_LBL_DONATION_FNAME"
+            description="COM_DW_DONATIONS_FORM_DESC_DONATION_FNAME"     
+            filter="string" 
+			required="true"  
+			hint="COM_DW_DONATIONS_FORM_LBL_DONATION_FNAME" 
+			class="uk-form-large uk-width" />
+        <field name="lname" type="text"     
+            label="COM_DW_DONATIONS_FORM_LBL_DONATION_LNAME"
+            description="COM_DW_DONATIONS_FORM_DESC_DONATION_LNAME" 
+			hint="COM_DW_DONATIONS_FORM_LBL_DONATION_LNAME" 
+			class="uk-form-large uk-width"     
+            menu_published="0"
+            filter="string" 
+			required="true" 
+            option_on="Yes"
+            option_off="Yes" />
+        <field name="email" type="email" label="Email" description="" validate="email"  required="true" hint="Email" class="uk-form-large uk-width" />
+		<field name="amount" type="dwamount"  
+            label="COM_DW_DONATIONS_FORM_LBL_DONATION_AMOUNT"
+            description="COM_DW_DONATIONS_FORM_DESC_DONATION_AMOUNT" 
+			class="uk-form-large" 
+			default="20"   
+            required="true" 
+            option_on="Yes"
+            option_off="Yes">
+			<option value="5">5</option>
+			<option value="10">10</option>
+			<option value="20">20</option>
+			<option value="50">50</option>
+		</field>
+        <field name="country" type="dwcountry"
+            label="COM_DW_DONATIONS_FORM_LBL_DONATION_COUNTRY"
+            description="COM_DW_DONATIONS_FORM_DESC_DONATION_COUNTRY" 
+			class="uk-form-large uk-width"
+            required="true" 
+            multiple="false" />
+        <field name="anonymous" type="checkbox"
+            label="COM_DW_DONATIONS_FORM_LBL_DONATION_ANONYMOUS"
+            description="COM_DW_DONATIONS_FORM_DESC_DONATION_ANONYMOUS" 
+            menu_published="0"
+            filter="raw"
+            option_on="Yes"
+            option_off="Yes" 
+			/>
+        <field name="order_code" type="hidden" size="40" class="inputbox"
+            label="COM_DW_DONATIONS_FORM_LBL_DONATION_ORDER_CODE"
+            description="COM_DW_DONATIONS_FORM_DESC_DONATION_ORDER_CODE" 
+        	filter="safehtml" />
+		<field name="transaction_id" type="hidden" size="40" class="inputbox"
+            label="COM_DW_DONATIONS_FORM_LBL_DONATION_TRANSACTION_ID"
+            description="COM_DW_DONATIONS_FORM_DESC_DONATION_TRANSACTION_ID" 
+        	filter="safehtml" />
+        <field name="state" type="hidden" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1" default="0" />
+    </fieldset>
+	<fields name="parameters">
+		<field name="testfield" type="text"     
+            label="COM_DW_DONATIONS_FORM_LBL_DONATION_FNAME"
+            description="COM_DW_DONATIONS_FORM_DESC_DONATION_FNAME"     
+            filter="word" />
+	</fields>
+</form>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.0" method="upgrade">
+    <name>com_dw_donations</name>
+    <creationDate>2015-03-03</creationDate>
+    <copyright>Copyright (C) 2014. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Charalampos Kaklamanos</author>
+    <authorEmail>dev.yesinternet@gmail.com</authorEmail>
+    <authorUrl>http://www.yesinternet.gr</authorUrl>
+    <version>1.0.0</version>
+    <description></description>
+    
+    <scriptfile>script.php</scriptfile>
+    
+    <install> <!-- Runs on install -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <uninstall> <!-- Runs on uninstall -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+
+    <files folder="site">
+        <filename>index.html</filename>
+        <filename>dw_donations.php</filename>
+        <filename>controller.php</filename>
+        <filename>router.php</filename>
+        <folder>views</folder>
+        <folder>models</folder>
+        <folder>controllers</folder>
+        <folder>helpers</folder>
+        <folder>assets</folder>
+    </files>
+    <languages folder="languages/site">
+        
+			<language tag="en-GB">en-GB/en-GB.com_dw_donations.ini</language>
+    </languages>
+    <administration>
+        <menu img="components/com_dw_donations/assets/images/s_com_dw_donations.png" >COM_DW_DONATIONS</menu>
+        <submenu>
+            
+			<menu link="option=com_dw_donations&amp;view=donations" view="donations" img="components/com_dw_donations/assets/images/s_donations.png" alt="Dw_donations/Donations">COM_DW_DONATIONS_TITLE_DONATIONS</menu>
+
+        </submenu>
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <filename>controller.php</filename>
+            <filename>index.html</filename>
+            <filename>dw_donations.php</filename>
+            <folder>controllers</folder>
+            <folder>assets</folder>
+            <folder>helpers</folder>
+            <folder>models</folder>
+            <folder>sql</folder>
+            <folder>tables</folder>
+            <folder>views</folder>
+        </files>
+        <languages folder="languages/administrator">
+            
+			<language tag="en-GB">en-GB/en-GB.com_dw_donations.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_dw_donations.sys.ini</language>
+        </languages>
+    </administration>
+    <plugins>
+        <plugin group="search" plugin="dw_donations"/>
+    </plugins>
+    
+</extension>
+<!-- Component built by the Joomla Component Creator -->
+<!-- http://www.component-creator.com/ -->

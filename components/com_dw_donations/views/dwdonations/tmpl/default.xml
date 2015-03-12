@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_DW_DONATIONS_TITLE_LIST_VIEW_DWDONATIONS" option="View">
+        <message>
+                        <![CDATA[COM_DW_DONATIONS_TITLE_LIST_VIEW_DONATIONS_DESC]]>
+        </message>
+	</layout>
+</metadata>
