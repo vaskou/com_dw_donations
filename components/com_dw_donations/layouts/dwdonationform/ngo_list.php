@@ -49,12 +49,12 @@ $jinput = JFactory::getApplication()->input;
 			<div class="ngo-list-wrapper uk-margin-large-top" id="ngo_list_wrapper">
                 
 				<div id="ngo_list" class="ngos-list">
-                	<div class="list">
+                	<ul class="list uk-list uk-list-line">
                 	<?php
 						$ngo_list_row_params=array('ngo_list'=>$displayData['ngo_list']);
 						echo JLayoutHelper::render('dwdonationform.ngo_list_row',$ngo_list_row_params,JPATH_ROOT . COMPONENT_PATH .'/layouts');
 					?>
-                    </div>
+                    </ul>
                 </div>
                 
 				<ul id="ngo_list_pagination" class="pagination uk-pagination uk-margin-small-top"></ul>

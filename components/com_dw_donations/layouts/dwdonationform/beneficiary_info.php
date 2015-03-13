@@ -14,7 +14,7 @@ defined('JPATH_BASE') or die;
 		<div class="uk-width-4-6">
 			<div class="uk-text-large uk-text-right">
 				<span class="uk-text-muted"><?php echo JText::_('COM_DW_DONATIONS_FORM_DONATION'); ?></span></br>
-				<span><?php echo $displayData['ngo_name']; ?>
+				<span><?php echo $displayData['ngo_name']; ?></span>
 			</div>
 			
 			<div class="uk-text-right">
@@ -34,7 +34,6 @@ defined('JPATH_BASE') or die;
 					null ); 
 				?>
 			</div>
-		</div>
 		</div>
 	</div>
 </div>

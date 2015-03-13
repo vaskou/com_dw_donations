@@ -41,6 +41,7 @@ function fn_ngo_donate_button_click(ngo_id,custom_url)
 	fn_ajax_controller_calls('fn_get_beneficiary_info_ajax','ajax',request).done(function(){
 		jQuery(".payment-step-1").slideToggle(1000);
 		jQuery(".payment-step-2").slideToggle(1000);
+		jQuery("body,html").animate({scrollTop :0}, 1000,function(){ });
 	});
 }
 
@@ -77,6 +78,7 @@ function fn_payment_step_back()
 		var prev=step-1;
 		jQuery(".payment-step-"+step).slideToggle(1000);
 		jQuery(".payment-step-"+prev).slideToggle(1000);
+		jQuery("body,html").animate({scrollTop :0}, 1000,function(){ });
 	});
 }
 
@@ -109,7 +111,7 @@ function fn_moneydonationwizard_init(current_url,plus)
 	//var plus='<?php echo (JFactory::getConfig()->get('sef')==1)?'?':'&' ?>';
 	
 	var values_ngoItemsInList=jQuery('#ngo_item_no_list').val();
-	if(values_ngoItemsInList==0){ values_ngoItemsInList=100; }
+	if(values_ngoItemsInList==0){ values_ngoItemsInList=10; }
 	
 	var options = {
 		valueNames: [ 'ngoName', 'ngoObjectives', 'ngoObjective', 'ngoActionArea', 'ngoPriority' ],
@@ -139,7 +141,7 @@ function fn_moneydonationwizard_init(current_url,plus)
 	
 	jQuery('#ngo_item_no_list').change(function(){
 		var count=jQuery(this).val();
-		if(count==0){ count=100; }
+		if(count==0){ count=10; }
 		ngoList.show(1,count);
 	});
 	

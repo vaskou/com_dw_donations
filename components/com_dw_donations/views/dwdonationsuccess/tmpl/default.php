@@ -20,12 +20,12 @@ $payment=$app->getUserState('com_dw_donations.payment.data');
 if(isset($payment)){
 	$payment=json_decode($payment);
 }
-//$payment=$this->payment;
+
 $user  = CFactory::getUser( $payment->beneficiary_id );
 $name = $user->getDisplayName();
 $link = CRoute::_('index.php?option=com_community&view=profile&userid='.$payment->beneficiary_id);
 $avatarUrl = $user->getThumbAvatar();
-//$app->setUserState('com_moneydonations.payment.data', null);
+//$app->setUserState('com_dw_donations.payment.data', null);
 	
 ?>
 
