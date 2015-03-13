@@ -15,6 +15,7 @@ class DwDonationsHelper {
 	{
 		$user = JFactory::getUser();
 		$userId = $user->get('id');
+		$jinput = JFactory::getApplication()->input;
 		
 		$donorwizUser=new DonorwizUser($userId);
 		$isBeneficiaryDonations = $donorwizUser-> isBeneficiary('com_dw_donations');
@@ -22,11 +23,12 @@ class DwDonationsHelper {
 		$this->isBeneficiaryDonations=$isBeneficiaryDonations;
 		
 		if($isBeneficiaryDonations){
-			JRequest::setVar('beneficiary_id', $userId);
+			$jinput->set('beneficiary_id', $userId);
 		}else{
-			JRequest::setVar('donor_id', $userId);
+			$jinput->set('donor_id', $userId);
 		}
-		
+		$jinput->set('filter_order', 'modified');
+		$jinput->set('filter_order_Dir', 'desc');
 		$this->total = self::fn_get_donations_sum_by_user_id( $userId , $isBeneficiaryDonations );
 		
 	}
@@ -55,7 +57,9 @@ class DwDonationsHelper {
 		$db->setQuery($query);
         $db->Query();
 		$result = $db->loadResult();
-		
+		if(empty($result)){
+			$result=0;
+		}
 		return $result;
 	}
 	

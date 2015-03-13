@@ -89,11 +89,11 @@ class JFormFieldDwAmount extends JFormField
 
 		$html[] = '<div class="amnt-changer uk-display-inline uk-hidden">';
 		$html[] = '		<a type="button" class="uk-button uk-button-large uk-button-blank amnt-button amnt-decrease uk-active">-</a>';
-		$html[] = '		<input type="text" id="'.$this->id.'_text" class="amnt-value uk-form-large uk-text-center" value="10" maxlength="3" size="3" />';
+		$html[] = '		<input type="number" id="'.$this->id.'_text" class="amnt-value uk-form-large uk-text-center" value="10" maxlength="3" size="3" style="width:56px" />';
 		$html[] = '		<a type="button" class="uk-button uk-button-large uk-button-blank amnt-button amnt-increase uk-active">+</a>';
 		$html[] = '</div>';
 		
-		$html[] = '<input type="hidden" name="'.$this->name.'" value="" id="'.$this->id.'_custom" />';
+		$html[] = '<input type="hidden" name="'.$this->name.'" value="'.$default.'" id="'.$this->id.'_custom" />';
 		
 		// End the radio field output.
 		//$html[] = '</fieldset>';
@@ -128,6 +128,21 @@ class JFormFieldDwAmount extends JFormField
 							$(".predefined-options-group").toggleClass("uk-hidden");
 							
 							$(".amnt-changer").toggleClass("uk-hidden");
+							
+							if(e.target.hasClass("other-amount")){
+								amount=$(".amnt-value").val();
+							
+								$("#'.$this->id.'_custom").val(amount);
+
+								$("#donate-btn-amount").text("€"+amount);
+							}
+							if(e.target.hasClass("other-amount-back")){
+								amount=$(".jform_amount_option.uk-active").attr("data-amount");
+							
+								$("#'.$this->id.'_custom").val(amount);
+
+								$("#donate-btn-amount").text("€"+amount);
+							}
 			
 						});
 
@@ -161,11 +176,12 @@ class JFormFieldDwAmount extends JFormField
 						});
 						$("#'.$this->id.'_text").keyup(function(event){
 							if((event.which>=48 && event.which<=57) || (event.which>=96 && event.which<=105)){
-								$("#'.$this->id.'_custom").val($(this).val())
+								$("#'.$this->id.'_custom").val($(this).val());
 							}
 							if ($.inArray(event.which, [8, 9, 27, 13, 46]) !== -1 ) {
-								$("#'.$this->id.'_custom").val($(this).val())
+								$("#'.$this->id.'_custom").val($(this).val());
 							}
+							$("#donate-btn-amount").text("€"+$(this).val());
 						});
 						$("#'.$this->id.'_text").keydown(function (e) {
 							// Allow: backspace, delete, tab, escape, enter
@@ -185,6 +201,8 @@ class JFormFieldDwAmount extends JFormField
                				if($(this).val()==""||$(this).val()==0){
 								$(this).val("10");
 							}
+							$("#'.$this->id.'_custom").val($(this).val());
+							$("#donate-btn-amount").text("€"+$(this).val());
             			});
 					});';
 

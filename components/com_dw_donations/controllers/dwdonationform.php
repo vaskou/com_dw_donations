@@ -22,14 +22,16 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 		$result=array();
 		
 		$jinput = JFactory::getApplication()->input;
+		$form_data = JFactory::getApplication()->input->get('jform', array(), 'array');
+		
 		$app = JFactory::getApplication();
         $model = $this->getModel('DwDonationForm', 'Dw_donationsModel');
 		
 		$params=array('controller'=>$this,'model'=>$model,'jinput'=>$jinput);
 		
-		if(!JSession::checkToken()){
-			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('error'=>array('error_text'=>JText::_('JINVALID_TOKEN')),'params'=>$params));
-			//jexit();
+		$validation=self::fn_initial_validation($form_data);
+		if($validation!==true){
+			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('error'=>array('error_text'=>$validation),'params'=>$params));
 			return false;
 		}
 			
@@ -180,6 +182,85 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
         }else{
 			return $data;
 		}
+	}
+	
+	private function fn_initial_validation($data)
+	{
+		if(!JSession::checkToken()){
+			return JText::_('JINVALID_TOKEN');
+		}
+		if(!self::fn_check_donation_exists($data)){
+			return JText::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST');
+		}
+		
+		if(!self::fn_validate_donor_and_beneficiary($data)){
+			return JText::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST');
+		}
+		if(!self::fn_check_donations_amount($data)){
+			return JText::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST');
+		}
+		if(!JSession::checkToken()){
+			return JText::_('JINVALID_TOKEN');
+		}
+		return true;
+	}
+	
+	private function fn_check_donation_exists($data)
+	{
+		/*$donations = $this->getModel('DwDonationForm', 'Dw_donationsModel');
+		$donation = $donations->getTable();
+		$id=array("id"=>$data['id']);
+		if($donation->load($id)){
+			return false;
+		}*/
+		if($data['id']!=0){
+			return false;
+		}
+		return true;
+	}
+	
+	private function fn_validate_donor_and_beneficiary($data)
+	{		
+		$donor_id=$data['donor_id'];
+		$created_by=$data['created_by'];
+		$beneficiary_id=$data['beneficiary_id'];
+		
+		$user_id = JFactory::getUser()->get('id');
+		
+		if($donor_id!=$created_by){
+			return false;	
+		}
+		
+		if($donor_id!=$user_id){
+			return false;
+		}
+		
+		$donorwizUser=new DonorwizUser($donor_id);
+		$donor_is_beneficiary = $donorwizUser-> isBeneficiary('com_dw_donations');
+		
+		$table   = JUser::getTable();
+		
+		$beneficiary_exists=$table->load( $beneficiary_id );
+		
+		if($beneficiary_exists){
+			$donorwizUser=new DonorwizUser($beneficiary_id);
+			$beneficiary_is_beneficiary = $donorwizUser-> isBeneficiary('com_dw_donations');
+		}
+		
+		if(!$beneficiary_exists || $donor_is_beneficiary || !$beneficiary_is_beneficiary)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private function fn_check_donations_amount($data)
+	{
+		if($data['amount']>999 || $data['amount']<1){
+			return false;
+		}
+		return true;
 	}
 
 }

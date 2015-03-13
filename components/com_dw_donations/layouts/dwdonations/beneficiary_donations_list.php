@@ -67,7 +67,7 @@ $total=$displayData['total'];
 			</div>
 
 			<div class="uk-width-1-1">
-				<?php if( $item->donor_id ):?>
+				<?php if( $item->donor_id && JUser::getTable()->load($item->donor_id)):?>
 					<i class="uk-icon-user uk-text-primary"></i>
 					<a target="_blank" href="<?php echo CRoute::_('index.php?option=com_community&view=profile&userid='.$item->donor_id);?>">
 					<?php echo JText::_('COM_DW_DONATIONS_LIST_VIEW_PROFILE'); ?>

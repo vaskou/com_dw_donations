@@ -64,6 +64,13 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 				if ($return === false) {
 					// ToDo: Error logging	
 				}
+			}else{
+				$menu = JFactory::getApplication()->getMenu();
+				$item = $menu->getActive();
+				$url = (empty($item->link) ? 'index.php?option=com_dw_donations&view=dwdonationsuccess' : $item->link);
+				$app->setUserState('com_moneydonations.payment.data', json_encode($payment));
+				$this->setRedirect(JRoute::_($url, false));
+				return false;
 			}
 		}else{
 			// ToDo: Error logging

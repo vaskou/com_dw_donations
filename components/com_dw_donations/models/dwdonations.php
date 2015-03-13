@@ -76,7 +76,7 @@ class Dw_donationsModelDwDonations extends JModelList
 		$this->setState('list.start', $limitstart);
 		
 		// DW Set filters from GET request
-		$app->setUserState( $this->context . '.filter', JRequest::get());
+		$app->setUserState( $this->context . '.filter', $app->input->getArray());
 
 		if ($list = $app->getUserStateFromRequest($this->context . '.list', 'list', array(), 'array'))
 		{
