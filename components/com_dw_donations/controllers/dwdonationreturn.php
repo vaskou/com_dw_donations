@@ -68,7 +68,7 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 				$menu = JFactory::getApplication()->getMenu();
 				$item = $menu->getActive();
 				$url = (empty($item->link) ? 'index.php?option=com_dw_donations&view=dwdonationsuccess' : $item->link);
-				$app->setUserState('com_moneydonations.payment.data', json_encode($payment));
+				$app->setUserState('com_dw_donations.payment.data', json_encode($payment));
 				$this->setRedirect(JRoute::_($url, false));
 				return false;
 			}
@@ -133,7 +133,7 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 		$menu = JFactory::getApplication()->getMenu();
 		$item = $menu->getActive();
 		$url = (empty($item->link) ? 'index.php?option=com_dw_donations&view=dwdonationsuccess' : $item->link);
-		$app->setUserState('com_moneydonations.payment.data', json_encode($payment));
+		$app->setUserState('com_dw_donations.payment.data', json_encode($payment));
 		$this->setRedirect(JRoute::_($url, false));
 
 	}
