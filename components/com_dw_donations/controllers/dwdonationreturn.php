@@ -69,59 +69,11 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 			// ToDo: Error logging
 		}
 		
-		//Notify Donor
 		
-		$donorwizMail = new DonorwizMail();
-		$beneficiary = JFactory::getUser( $payment -> beneficiary_id );
-
-		
-
-		$mailParams = array();
-		$mailParams['subject'] = JText::_('COM_DW_DONATIONS_EMAIL_DONOR_SUCCESS_SUBJECT') ;
-		$mailParams['recipient'] = $payment->email;
-		$mailParams['isHTML'] = true;
-		$mailParams['layout'] = 'success_donor';
-		$mailParams['layout_path'] = JPATH_ROOT .'/components/com_dw_donations/layouts/dwemails';
-		$mailParams['layout_params'] = array( 'amount' => $payment -> amount , 'beneficiary' => $beneficiary -> name );
-		
-		$donorwizMail -> sendMail( $mailParams ) ;
-			
-
-		
-		//Notify Beneficiary
-		
-		$donorwizMail = new DonorwizMail();
-		$mailParams = array();
-		$mailParams['subject'] = JText::_('COM_DW_DONATIONS_EMAIL_BENEFICIARY_SUCCESS_SUBJECT') ;
-		$mailParams['recipient'] = $beneficiary->email;
-		$mailParams['isHTML'] = true;
-		$mailParams['layout'] = 'success_beneficiary';
-		$mailParams['layout_path'] = JPATH_ROOT .'/components/com_dw_donations/layouts/dwemails';
-		$mailParams['layout_params'] = array( 'amount' => $payment -> amount , 'donor' => $payment -> fname.' '.$payment -> lname );
-
-		$donorwizMail -> sendMail( $mailParams ) ;
-		
-
-		//Notify beneficiary via messaging system ---------------------------------------------------------------------
-		
-		// JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dw_opportunities/models', 'Dw_opportunitiesModel');
-		// $opportunityModel = JModelLegacy::getInstance('DwOpportunity', 'Dw_opportunitiesModel', array('ignore_request' => true));	
-		// $opportunity = $opportunityModel -> getData( $data['opportunity_id']);
-
-		// $donorwizMessaging = new DonorwizMessaging();
-		
-		// $messageParams = array();
-		// $messageParams['actor_id'] = CFactory::getUser() -> id;
-		// $messageParams['target'] = $opportunity -> created_by;
-		// $messageParams['opportunity_title'] = $opportunity -> title;
-		// $messageParams['link'] = JRoute::_('index.php?option=com_donorwiz&view=dashboard&layout=dwopportunity&Itemid=298&id='.$opportunity -> id).'#opportunityresponse'.$data['id'];
-		// $messageParams['subject'] = $opportunity->title.': '.JText::_('COM_DW_OPPORTUNITIES_RESPONSES_NEW_RESPONSE_NOTIFICATION_SUBJECT');
-		// $messageParams['body'] = JText::_('COM_DW_OPPORTUNITIES_RESPONSES_NEW_RESPONSE_NOTIFICATION_BODY');
-		
-		// $donorwizMessaging -> sendNotification ( $messageParams ) ;
-		
-		//----------------------------------------------------------------------------------------------------------------------------------
-
+		//Notify Donor and Beneficiary about the payment success --------------------------------------------------------------------
+		JPluginHelper::importPlugin('donorwiz');
+		$dispatcher	= JEventDispatcher::getInstance();
+		$dispatcher->trigger( 'onDonationSuccess' , array( &$payment ) );
 		
 		$menu = JFactory::getApplication()->getMenu();
 		$item = $menu->getActive();
