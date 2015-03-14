@@ -4,12 +4,17 @@ defined('JPATH_BASE') or die;
 
 ?>
 
-<?php if(!empty($displayData)) :?>
+<?php 
+if(!empty($displayData)){
+	$link = CRoute::_('index.php?option=com_community&view=profile&userid='.$displayData['ngo_id']);
+?>
 
 <div class="uk-panel">
 	<div class="uk-grid">
 		<div class="uk-width-2-6">
-			<img class="uk-thumbnail" src="<?php echo $displayData['ngo_avatar'];?>" alt="">
+        	<a href="<?php echo $link;?>" target="_blank" style="text-decoration:none !important;" title="<?php echo JText::_('COM_DW_DONATIONS_LIST_VIEW_PROFILE');?>" data-uk-tooltip>
+				<img class="uk-thumbnail" src="<?php echo $displayData['ngo_avatar'];?>" alt="<?php echo $displayData['ngo_name']; ?>" title="<?php echo $displayData['ngo_name']; ?>">
+            </a>
 		</div>
 		<div class="uk-width-4-6">
 			<div class="uk-text-large uk-text-right">
@@ -38,4 +43,6 @@ defined('JPATH_BASE') or die;
 	</div>
 </div>
 
-<?php endif;?>
+<?php
+}
+?>
