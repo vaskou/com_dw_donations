@@ -97,6 +97,7 @@ class JFormFieldDwCountry extends JFormField
 
 		foreach($countriesSorted as $countrySorted)
 		{
+			$selected=($this->value==$countrySorted['code'])? 'selected="selected"' :'';
 			$html[]='<option value="'.$countrySorted['code'].'">'.$countrySorted['name'].'</option>';
 		}
 		
@@ -104,7 +105,9 @@ class JFormFieldDwCountry extends JFormField
 		$html[]='<script type="text/javascript">
 					jQuery(document).ready(function($) {
 						$.getJSON("http://www.telize.com/geoip?callback=?",function getgeoip(json){
-							$("#jform_'.$this->fieldname.'").val(json.country_code);
+							if("'.$this->value.'"==""){
+								$("#jform_'.$this->fieldname.'").val(json.country_code);
+							}
 						});
 					});
 				</script>';

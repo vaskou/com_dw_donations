@@ -117,9 +117,10 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 				$model->checkin($return);
 			}
 			// Save donation data
-			$payment=json_encode($donation);
-			$app->setUserState('com_dw_donations.payment.data', $payment);
-			
+			//$payment=json_encode($donation);
+			$app->setUserState('com_dw_donations.payment.data', $donation);
+			$app->setUserState('com_dw_donations.returnfromviva', false);
+			$app->setUserState('com_dw_donations.donation.data', $donation);
 			// Clear the profile id from the session.
 			$app->setUserState('com_dw_donations.edit.donation.id', null);
 			// Flush the data from the session.

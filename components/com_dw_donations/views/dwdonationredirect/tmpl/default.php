@@ -3,7 +3,16 @@
 defined('_JEXEC') or die;
 
 $jinput = JFactory::getApplication()->input;
-
+var_dump($_SESSION);
+//var_dump($_SERVER);
+$app = JFactory::getApplication();
+$returnfromviva=$app->getUserState('com_dw_donations.returnfromviva');
+if($returnfromviva===false){
+	$app->setUserState('com_dw_donations.returnfromviva',true);
+}else{
+	header('Location:'.$_SERVER['HTTP_REFERER']);
+	exit();
+}
 ?>
 
 <h1 class="uk-text-center"><?php echo JText::_('COM_DW_DONATIONS_PAYMENT_REDIRECT_TITLE');?></h1>
@@ -19,4 +28,4 @@ $jinput = JFactory::getApplication()->input;
 </a>
 </p>
 
-<?php header('Refresh: 3; URL=http://demo.vivapayments.com/web/newtransaction.aspx?ref='.$jinput->get('orderId','','cmd')); ?>
+<?php //header('Refresh: 3; URL=http://demo.vivapayments.com/web/newtransaction.aspx?ref='.$jinput->get('orderId','','cmd')); ?>

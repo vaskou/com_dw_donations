@@ -37,14 +37,14 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 		
 		$payment_data=$app->getUserState('com_dw_donations.payment.data');
 		if(isset($payment_data)){
-			$payment_data=json_decode($payment_data);
+			//$payment_data=json_decode($payment_data);
 		}else{
 			JError::raiseError(402, JText::_('JERROR_ALERTNOAUTHOR'));
 			return false;
 		}
 		
 		$order_code=array('order_code'=>$orderCode);
-		if($order_code['order_code']!=$payment_data->order_code)
+		if($order_code['order_code']!=$payment_data['order_code'])
 		{
 			JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
 			return false;	

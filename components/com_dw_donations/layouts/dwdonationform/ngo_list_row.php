@@ -13,14 +13,14 @@ $ngos=$displayData['ngo_list'];
     
         <div class="uk-width-2-10 ">
             <div class="list-img uk-thumbnail">
-                <img src="<?php echo $ngo['ngo_avatar'];?>" />
+                <img class="ngo_avatar" src="<?php echo $ngo['ngo_avatar'];?>"  alt="<?php echo $ngo['ngo_name']; ?>" title="<?php echo $ngo['ngo_name']; ?>" />
             </div>
         </div>
         
         <div class="uk-width-8-10 ">
             
             <div id="ngo_<?php echo $id; ?>" class="ngos ngoName uk-h3 uk-width-1-1 uk-text-right">
-                <span><?php echo $ngo['ngo_name'];?></span><i class="uk-icon-long-arrow-right uk-margin-small-left"></i>
+                <span class="ngo_name"><?php echo $ngo['ngo_name'];?></span><i class="uk-icon-long-arrow-right uk-margin-small-left"></i>
             </div>
             
             <div class="ngoObjectives uk-text-muted uk-text-small uk-text-right uk-width-1-1">

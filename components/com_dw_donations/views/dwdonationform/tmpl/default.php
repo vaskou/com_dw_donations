@@ -20,8 +20,10 @@ JHtml::_('jquery.framework');
 JHtml::script(Juri::base().'components/com_dw_donations/assets/js/list.js');
 JHtml::script(Juri::base().'components/com_dw_donations/assets/js/list.pagination.js');
 JHtml::script(Juri::base().'components/com_dw_donations/assets/js/wizard_ajax.js');
-
+$app = JFactory::getApplication();
 $jinput = JFactory::getApplication()->input;
+
+
 
 $page=$jinput->get('page',0);
 $ngos_array=$this->ngos_array;
@@ -30,7 +32,17 @@ $donor_user = JFactory::getUser();
 $donor  = CFactory::getUser($donor_user->get('id') );
 $donor_fname=$donor->getInfo('FIELD_GIVENNAME');
 $donor_lname=$donor->getInfo('FIELD_FAMILYNAME');
+$donor_email=$donor->email;
+$session_donation_data=null;
 
+if($donation_data=$app->getUserState('com_dw_donations.donation.data')){
+	var_dump($donation_data);
+	$donor_fname=$donation_data['fname'];
+	$donor_lname=$donation_data['lname'];
+	$donor_email=$donation_data['email'];
+	$session_donation_data=$donation_data;
+	$app->setUserState('com_dw_donations.donation.data',null);
+}
 
 $donorUser=new DonorwizUser($donor->id);
 $isDonorBeneficiary=$donorUser-> isBeneficiary('com_dw_donations');
@@ -63,10 +75,11 @@ $donation_form_params=array(
 	'donor'=>array(
 		'fname'=>$donor_fname,
 		'lname'=>$donor_lname,
-		'email'=>$donor->email,
+		'email'=>$donor_email,
 		'isBeneficiary'=>$isDonorBeneficiary
 	),
-	'beneficiary'=>$beneficiary_info_params
+	'beneficiary'=>$beneficiary_info_params,
+	'session_donation_data'=>$session_donation_data
 );
 
 ?>
