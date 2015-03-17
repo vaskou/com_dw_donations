@@ -98,7 +98,7 @@ class JFormFieldDwCountry extends JFormField
 		foreach($countriesSorted as $countrySorted)
 		{
 			$selected=($this->value==$countrySorted['code'])? 'selected="selected"' :'';
-			$html[]='<option value="'.$countrySorted['code'].'">'.$countrySorted['name'].'</option>';
+			$html[]='<option value="'.$countrySorted['code'].'" '.$selected.'>'.$countrySorted['name'].'</option>';
 		}
 		
 		$html[]='</select>';

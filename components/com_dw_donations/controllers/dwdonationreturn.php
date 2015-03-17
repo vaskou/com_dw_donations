@@ -18,8 +18,10 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 	{
 		
 		$transactionData=array();
-		$jinput = JFactory::getApplication()->input;
+		
 		$app = JFactory::getApplication();
+		$jinput = $app->input;
+		
         $payments = $this->getModel('DwDonationForm', 'Dw_donationsModel');
 		
 		$transactionId=$jinput->get('t');
@@ -36,9 +38,7 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 		
 		
 		$payment_data=$app->getUserState('com_dw_donations.payment.data');
-		if(isset($payment_data)){
-			//$payment_data=json_decode($payment_data);
-		}else{
+		if(!isset($payment_data)){
 			JError::raiseError(402, JText::_('JERROR_ALERTNOAUTHOR'));
 			return false;
 		}

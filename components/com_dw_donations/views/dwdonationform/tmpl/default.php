@@ -33,10 +33,10 @@ $donor  = CFactory::getUser($donor_user->get('id') );
 $donor_fname=$donor->getInfo('FIELD_GIVENNAME');
 $donor_lname=$donor->getInfo('FIELD_FAMILYNAME');
 $donor_email=$donor->email;
+
 $session_donation_data=null;
 
 if($donation_data=$app->getUserState('com_dw_donations.donation.data')){
-	var_dump($donation_data);
 	$donor_fname=$donation_data['fname'];
 	$donor_lname=$donation_data['lname'];
 	$donor_email=$donation_data['email'];
@@ -53,9 +53,6 @@ $isBeneficiaryDonations = $donorwizUser-> isBeneficiary('com_dw_donations');
 if(!$isBeneficiaryDonations){
 	$beneficiary_id='';
 }
-
-
-$beneficiary_id=$jinput->get('beneficiary_id','');
 
 $ngo_list_params=array(
 	'beneficiary_id'=>$beneficiary_id,

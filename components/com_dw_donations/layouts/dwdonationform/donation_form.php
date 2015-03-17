@@ -1,7 +1,7 @@
 <?php
 defined('JPATH_BASE') or die;
 
-JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.formvalidator');
 
 $form=$displayData['form'];
 $donor=$displayData['donor'];
