@@ -74,9 +74,6 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 		$response = curl_exec($session);
 		curl_close($session);
 		
-		//var_dump($response);
-		/*var_dump(JFactory::getApplication()->input->getCmd('format'));*/
-		
 		// Parse the JSON response
 		try {
 			if(is_object(json_decode($response))){
@@ -201,12 +198,6 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 	
 	private function fn_check_donation_exists($data)
 	{
-		/*$donations = $this->getModel('DwDonationForm', 'Dw_donationsModel');
-		$donation = $donations->getTable();
-		$id=array("id"=>$data['id']);
-		if($donation->load($id)){
-			return false;
-		}*/
 		if($data['id']!=0){
 			return false;
 		}

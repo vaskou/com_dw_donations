@@ -109,7 +109,7 @@ class Dw_donationsModelDwDonationForm extends JModelForm
 	public function getTable($type = 'Donation', $prefix = 'Dw_donationsTable', $config = array())
 	{   
         /*$this->addTablePath(JPATH_COMPONENT_ADMINISTRATOR.'/tables');*/
-		$this->addTablePath(JPATH_ROOT.'administrator'.COMPONENT_PATH.'/tables');
+		$this->addTablePath(JPATH_ROOT.'/administrator'.COMPONENT_PATH.'/tables');
         return JTable::getInstance($type, $prefix, $config);
 	}     
 

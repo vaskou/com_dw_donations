@@ -20,12 +20,14 @@ JHtml::_('jquery.framework');
 JHtml::script(Juri::base().'components/com_dw_donations/assets/js/list.js');
 JHtml::script(Juri::base().'components/com_dw_donations/assets/js/list.pagination.js');
 JHtml::script(Juri::base().'components/com_dw_donations/assets/js/wizard_ajax.js');
+
 $app = JFactory::getApplication();
 $jinput = JFactory::getApplication()->input;
 
-
-
 $page=$jinput->get('page',0);
+
+$isPopup=$jinput->get('isPopup',0,'BOOLEAN');
+
 $ngos_array=$this->ngos_array;
 
 $donor_user = JFactory::getUser();
@@ -76,14 +78,19 @@ $donation_form_params=array(
 		'isBeneficiary'=>$isDonorBeneficiary
 	),
 	'beneficiary'=>$beneficiary_info_params,
-	'session_donation_data'=>$session_donation_data
+	'session_donation_data'=>$session_donation_data,
+	'isPopup'=>$isPopup
 );
 
 ?>
 
 <div class="uk-grid">
-
-	<?php echo JLayoutHelper::render('dwdonationform.ngo_list',$ngo_list_params,JPATH_ROOT.COMPONENT_PATH.'/layouts'); ?>
+	
+	<?php 
+		if(!$isPopup){
+			echo JLayoutHelper::render('dwdonationform.ngo_list',$ngo_list_params,JPATH_ROOT.COMPONENT_PATH.'/layouts'); 
+		}
+	?>
     <div class="uk-width-medium-1-1">
         <div class="uk-grid payment-step payment-step-2" style=" <?php if($beneficiary_id==''){ echo 'display:none;';}?>" data-step="2">
             <div class="uk-width-medium-1-1 ngo_info">
@@ -108,14 +115,7 @@ jQuery(function($){
 	
 	var plus='<?php echo (JFactory::getConfig()->get('sef')==1)?'?':'&' ?>';
 	var current_url='<?php echo  htmlspecialchars_decode(JRoute::_("index.php?option=com_dw_donations&view=dwdonationform",false)); ?>';
-	fn_moneydonationwizard_init(current_url,plus);
-	
-	//Doesn't work with listjs
-	/*fn_pagination_click(current_url+plus,form);
-	
-	$(document).ajaxStop(function() {
-        fn_pagination_click(current_url+plus,form);
-    });*/
+	fn_moneydonationwizard_init(current_url,plus,<?php echo $isPopup;?>);
 	
 });
 

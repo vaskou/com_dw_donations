@@ -8,6 +8,7 @@ $donor=$displayData['donor'];
 $beneficiary=$displayData['beneficiary'];
 $session_donation_data=$displayData['session_donation_data'];
 $anonymous=(isset($session_donation_data['anonymous']))?$session_donation_data['anonymous']:0;
+$isPopup=( isset ( $displayData['isPopup'] ) ) ? $displayData['isPopup']  : false ;
 ?>
 
 
@@ -104,10 +105,12 @@ $anonymous=(isset($session_donation_data['anonymous']))?$session_donation_data['
 	<p class="uk-text-muted uk-text-small uk-margin-remove">
 		<?php echo JText::_('COM_DW_DONATIONS_FORM_VIVA_PAYMENTS'); ?>
 	</p>
-	  
-	<p class="uk-text-center">
-		<a class="payment-step-back"><?php echo JText::_('COM_DW_DONATIONS_FORM_LBL_RETURN'); ?></a>
-	</p>
+	
+    <?php if(!$isPopup){ ?>
+        <p class="uk-text-center">
+            <a class="payment-step-back"><?php echo JText::_('COM_DW_DONATIONS_FORM_LBL_RETURN'); ?></a>
+        </p>
+    <?php } ?>
 	  
 </div>
 

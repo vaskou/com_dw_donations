@@ -107,17 +107,14 @@ function fn_pagination_click(data,form)
 	jQuery("#ngo_list_pagination li a").click(function(){
 		jQuery("#ngo_page").val(jQuery(this).data('page'));
 		fn_url_change(data+form.serialize());
-		//console.log(data+form.serialize()+"test"+jQuery(this).data('page'));
 	});
 }
 
-function fn_moneydonationwizard_init(current_url,plus)
+function fn_moneydonationwizard_init(current_url,plus,isPopup)
 {
 	var form = jQuery('#form-moneydonation-filters');
 	var formData;
 	var formMethod;
-	//var current_url=window.location.href;
-	//var plus='<?php echo (JFactory::getConfig()->get('sef')==1)?'?':'&' ?>';
 	
 	var values_ngoItemsInList=jQuery('#ngo_item_no_list').val();
 	if(values_ngoItemsInList==0){ values_ngoItemsInList=10; }
@@ -128,23 +125,23 @@ function fn_moneydonationwizard_init(current_url,plus)
 		plugins: [ ListPagination({'innerWindow':1,'outerWindow':2}) ]
 	};
 	
-	var ngoList = new List('form-moneydonation-filters', options);
-
-	var updateList=function(){
-		var values_ngoObjective=jQuery('#ngo_objective_list').val();
-		var values_ngoActionArea=jQuery('#ngo_actionarea_list').val();
-		ngoList.filter(function(item) {
-			return (item.values().ngoObjective.indexOf(values_ngoObjective,0)>-1 || values_ngoObjective==0) && (item.values().ngoActionArea==values_ngoActionArea || values_ngoActionArea==0)
-		});
-		
+	if(!isPopup){
+		var ngoList = new List('form-moneydonation-filters', options);
+	
+		var updateList=function(){
+			var values_ngoObjective=jQuery('#ngo_objective_list').val();
+			var values_ngoActionArea=jQuery('#ngo_actionarea_list').val();
+			ngoList.filter(function(item) {
+				return (item.values().ngoObjective.indexOf(values_ngoObjective,0)>-1 || values_ngoObjective==0) && (item.values().ngoActionArea==values_ngoActionArea || values_ngoActionArea==0)
+			});
+			
+		}
+		updateList();
 	}
-	updateList();
 	jQuery('.ngo_filter').change(function(){
 		updateList();
 		
 		formData = form.serialize();
-		//formMethod = form.attr('method');
-		//fn_url_change(current_url+plus+formData);
 		fn_url_change(current_url+plus+formData);
 	});
 	
@@ -178,4 +175,6 @@ function fn_moneydonationwizard_init(current_url,plus)
 	});
 	
 	fn_ajax_loader();
+	
+	jQuery('a[data-lightbox]').lightbox({"titlePosition":"float","transitionIn":"fade","transitionOut":"fade","overlayShow":1,"overlayColor":"#777","overlayOpacity":0.7});/*$widgetkit.load('/donorwiz/media/widgetkit/widgets/lightbox/js/lightbox.js').done(function(){jQuery(function($){setTimeout(function(){$('a[data-lightbox]').lightbox({"titlePosition":"float","transitionIn":"fade","transitionOut":"fade","overlayShow":1,"overlayColor":"#777","overlayOpacity":0.7});},500);});});*/
 }
