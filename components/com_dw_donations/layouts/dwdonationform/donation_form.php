@@ -9,6 +9,7 @@ $beneficiary=$displayData['beneficiary'];
 $session_donation_data=$displayData['session_donation_data'];
 $anonymous=(isset($session_donation_data['anonymous']))?$session_donation_data['anonymous']:0;
 $isPopup=( isset ( $displayData['isPopup'] ) ) ? $displayData['isPopup']  : false ;
+
 ?>
 
 
@@ -112,14 +113,6 @@ $isPopup=( isset ( $displayData['isPopup'] ) ) ? $displayData['isPopup']  : fals
         </p>
     <?php } ?>
 	  
-</div>
-
-<div class="donation-modal uk-modal">
-    <div class="uk-modal-dialog">
-    	<a class="uk-modal-close uk-close"></a>
-        <div class="donation-message">
-        </div>    
-    </div>
 </div>
 
 <script type="text/javascript">

@@ -82,6 +82,7 @@ $donation_form_params=array(
 	'isPopup'=>$isPopup
 );
 
+
 ?>
 
 <div class="uk-grid">
@@ -106,7 +107,7 @@ $donation_form_params=array(
 	<div class="ajax-loader-bg">
     </div>
 	<div class="ajax-loader">
-		<img src="<?php echo JUri::base().COMPONENT_PATH.'/assets/images/loader.gif';?>" />
+        <i class="uk-icon-spinner uk-icon-spin uk-icon-large"></i>
     </div>
 </div>
 

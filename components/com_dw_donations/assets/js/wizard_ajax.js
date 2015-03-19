@@ -52,9 +52,11 @@ function fn_ajax_loader()
 {
 	jQuery(document).ajaxStart(function() {
         jQuery('.ngo-loader').show();
+		jQuery('#lightbox-loading').css({"opacity":0});
     });
 	jQuery(document).ajaxStop(function() {
         jQuery('.ngo-loader').hide();
+		jQuery('#lightbox-loading').css({"opacity":1});
     });
 }
 
@@ -176,5 +178,5 @@ function fn_moneydonationwizard_init(current_url,plus,isPopup)
 	
 	fn_ajax_loader();
 	
-	jQuery('a[data-lightbox]').lightbox({"titlePosition":"float","transitionIn":"fade","transitionOut":"fade","overlayShow":1,"overlayColor":"#777","overlayOpacity":0.7});/*$widgetkit.load('/donorwiz/media/widgetkit/widgets/lightbox/js/lightbox.js').done(function(){jQuery(function($){setTimeout(function(){$('a[data-lightbox]').lightbox({"titlePosition":"float","transitionIn":"fade","transitionOut":"fade","overlayShow":1,"overlayColor":"#777","overlayOpacity":0.7});},500);});});*/
+	jQuery('a[data-lightbox]').lightbox();
 }

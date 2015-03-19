@@ -1,6 +1,10 @@
 <?php
 
 defined('_JEXEC') or die;
+$app=JFactory::getApplication();
+
+$current_url=JURI::getInstance()->toString();
+$app->setUserState('com_dw_donations.donation.refererUrl', $current_url);
 
 $beneficiary_id=( isset ( $displayData['beneficiary_id'] ) ) ? $displayData['beneficiary_id']  : null ;
 $isPopup=( isset ( $displayData['isPopup'] ) ) ? $displayData['isPopup']  : false ;
@@ -25,9 +29,9 @@ $scripts=array(
 $popup_params=array (
 	'isAjax' => true,
 	'buttonLink' => JRoute::_('index.php?option=com_dw_donations&view=dwdonationform',false),
-	'buttonText' => JText::_('COM_DONORWIZ_DONATE'),
+	'buttonText' => JText::_('COM_DW_DONATIONS_BTN_DONATE'),
 	'buttonIcon' => '',
-	'buttonType' => 'uk-hidden-small uk-button uk-button-blank',
+	'buttonType' => 'uk-hidden-small uk-button uk-button-primary',
 	'layoutPath' => JPATH_ROOT .'/components/com_dw_donations/layouts',
 	'layoutName' => 'dwdonationform.donation_form_view',
 	'layoutParams' => array( 'beneficiary_id' => $beneficiary_id, 'isPopup' => $isPopup ),
@@ -35,6 +39,6 @@ $popup_params=array (
 	'scripts' => $scripts
 );
 
-echo JLayoutHelper::render('popup.popup_button_a',$popup_params,JPATH_ROOT.'/components/com_donorwiz/layouts');
+echo JLayoutHelper::render('popup.popup_button',$popup_params,JPATH_ROOT.'/components/com_donorwiz/layouts');
 
 ?>

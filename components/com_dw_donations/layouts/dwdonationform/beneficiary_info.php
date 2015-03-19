@@ -2,9 +2,8 @@
 
 defined('JPATH_BASE') or die;
 
-?>
+$user = JFactory::getUser();
 
-<?php 
 //if(!empty($displayData)){
 	$link = CRoute::_('index.php?option=com_community&view=profile&userid='.$displayData['ngo_id']);
 ?>
@@ -21,7 +20,9 @@ defined('JPATH_BASE') or die;
 				<span class="uk-text-muted"><?php echo JText::_('COM_DW_DONATIONS_FORM_DONATION'); ?></span></br>
 				<span class="ngo_name"><?php echo $displayData['ngo_name']; ?></span>
 			</div>
-			
+			<?php
+			if($user->guest){
+			?>
 			<div class="uk-text-right">
 				<span><?php echo JText::_('COM_DW_DONATIONS_FORM_ALREADY_HAVE_AN_ACCOUNT');?></span>
 				<?php echo JLayoutHelper::render(
@@ -39,6 +40,7 @@ defined('JPATH_BASE') or die;
 					null ); 
 				?>
 			</div>
+            <?php } ?>
 		</div>
 	</div>
 </div>

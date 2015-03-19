@@ -25,11 +25,11 @@
 	min-height:62px;
 	width:62px;
 	background:#fff;
-	border:3px solid #ccc;
+	border:2px solid #ccc;
 	/*display:none;*/
 }
 
-.ajax-loader img{
+.ajax-loader i{
 	padding:15px 15px;
 }
 

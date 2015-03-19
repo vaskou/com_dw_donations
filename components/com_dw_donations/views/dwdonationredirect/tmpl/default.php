@@ -6,12 +6,26 @@ $app = JFactory::getApplication();
 $jinput = $app->input;
 
 $returnfromviva=$app->getUserState('com_dw_donations.returnfromviva');
+
 $donation=$app->getUserState('com_dw_donations.donation.data');
+
+$ses_url=$app->getUserState('com_dw_donations.donation.refererUrl');
+
+$ref_url=$jinput->server->get('HTTP_REFERER','','RAW');
+
+if($ses_url!=$ref_url){
+	$ref_url='';
+}
 
 if($returnfromviva===false){
 	$app->setUserState('com_dw_donations.returnfromviva',true);
 }else{
-	$app->redirect(JRoute::_('index.php?option=com_dw_donations&view=dwdonationform&beneficiary_id='.$donation['beneficiary_id'], false));
+	if($ref_url){
+		$app->redirect($ref_url);
+	}else{
+		$app->redirect(JRoute::_('index.php?option=com_dw_donations&view=dwdonationform&beneficiary_id='.$donation['beneficiary_id'], false));
+	}
+	$app->setUserState('com_dw_donations.donation.refererUrl',null);
 	exit();
 }
 ?>
