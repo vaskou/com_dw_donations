@@ -116,7 +116,8 @@ jQuery(function($){
 	
 	var plus='<?php echo (JFactory::getConfig()->get('sef')==1)?'?':'&' ?>';
 	var current_url='<?php echo  htmlspecialchars_decode(JRoute::_("index.php?option=com_dw_donations&view=dwdonationform",false)); ?>';
-	fn_moneydonationwizard_init(current_url,plus,<?php echo $isPopup;?>);
+	var ngo_url='<?php echo htmlspecialchars_decode(CRoute::_('index.php?option=com_community&view=profile'));?>';
+	fn_moneydonationwizard_init(current_url,plus,<?php echo $isPopup;?>,ngo_url);
 	
 });
 

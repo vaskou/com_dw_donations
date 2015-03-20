@@ -26,17 +26,17 @@ $user = JFactory::getUser();
 			<div class="uk-text-right">
 				<span><?php echo JText::_('COM_DW_DONATIONS_FORM_ALREADY_HAVE_AN_ACCOUNT');?></span>
 				<?php echo JLayoutHelper::render(
-					'popup-button', 
+					'popup.popup-button', 
 					array (
 						'buttonText' => JText::_('COM_DW_DONATIONS_FORM_LOGIN'),
 						'buttonIcon' => '',
 						'buttonType' => '',
 
-						'layoutPath' => JPATH_ROOT .'/components/com_donorwiz/layouts/user',
-						'layoutName' => 'login',
+						'layoutPath' => JPATH_ROOT .'/components/com_donorwiz/layouts',
+						'layoutName' => 'user.login',
 						'layoutParams' => array()
 					), 
-					JPATH_ROOT .'/components/com_donorwiz/layouts/popup' , 
+					JPATH_ROOT .'/components/com_donorwiz/layouts' , 
 					null ); 
 				?>
 			</div>

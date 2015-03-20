@@ -39,6 +39,6 @@ $popup_params=array (
 	'scripts' => $scripts
 );
 
-echo JLayoutHelper::render('popup.popup_button',$popup_params,JPATH_ROOT.'/components/com_donorwiz/layouts');
+echo JLayoutHelper::render('popup.popup-button',$popup_params,JPATH_ROOT.'/components/com_donorwiz/layouts');
 
 ?>
