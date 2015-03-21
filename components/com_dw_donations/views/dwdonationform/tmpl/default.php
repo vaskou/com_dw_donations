@@ -21,16 +21,30 @@ JHtml::script(Juri::base().'components/com_dw_donations/assets/js/list.js');
 JHtml::script(Juri::base().'components/com_dw_donations/assets/js/list.pagination.js');
 JHtml::script(Juri::base().'components/com_dw_donations/assets/js/wizard_ajax.js');
 
+$app = JFactory::getApplication();
 $jinput = JFactory::getApplication()->input;
 
 $page=$jinput->get('page',0);
+
+$isPopup=$jinput->get('isPopup',0,'BOOLEAN');
+
 $ngos_array=$this->ngos_array;
 
 $donor_user = JFactory::getUser();
 $donor  = CFactory::getUser($donor_user->get('id') );
 $donor_fname=$donor->getInfo('FIELD_GIVENNAME');
 $donor_lname=$donor->getInfo('FIELD_FAMILYNAME');
+$donor_email=$donor->email;
 
+$session_donation_data=null;
+
+if($donation_data=$app->getUserState('com_dw_donations.donation.data')){
+	$donor_fname=$donation_data['fname'];
+	$donor_lname=$donation_data['lname'];
+	$donor_email=$donation_data['email'];
+	$session_donation_data=$donation_data;
+	$app->setUserState('com_dw_donations.donation.data',null);
+}
 
 $donorUser=new DonorwizUser($donor->id);
 $isDonorBeneficiary=$donorUser-> isBeneficiary('com_dw_donations');
@@ -41,9 +55,6 @@ $isBeneficiaryDonations = $donorwizUser-> isBeneficiary('com_dw_donations');
 if(!$isBeneficiaryDonations){
 	$beneficiary_id='';
 }
-
-
-$beneficiary_id=$jinput->get('beneficiary_id','');
 
 $ngo_list_params=array(
 	'beneficiary_id'=>$beneficiary_id,
@@ -63,17 +74,24 @@ $donation_form_params=array(
 	'donor'=>array(
 		'fname'=>$donor_fname,
 		'lname'=>$donor_lname,
-		'email'=>$donor->email,
+		'email'=>$donor_email,
 		'isBeneficiary'=>$isDonorBeneficiary
 	),
-	'beneficiary'=>$beneficiary_info_params
+	'beneficiary'=>$beneficiary_info_params,
+	'session_donation_data'=>$session_donation_data,
+	'isPopup'=>$isPopup
 );
+
 
 ?>
 
 <div class="uk-grid">
-
-	<?php echo JLayoutHelper::render('dwdonationform.ngo_list',$ngo_list_params,JPATH_ROOT.COMPONENT_PATH.'/layouts'); ?>
+	
+	<?php 
+		if(!$isPopup){
+			echo JLayoutHelper::render('dwdonationform.ngo_list',$ngo_list_params,JPATH_ROOT.COMPONENT_PATH.'/layouts'); 
+		}
+	?>
     <div class="uk-width-medium-1-1">
         <div class="uk-grid payment-step payment-step-2" style=" <?php if($beneficiary_id==''){ echo 'display:none;';}?>" data-step="2">
             <div class="uk-width-medium-1-1 ngo_info">
@@ -89,7 +107,7 @@ $donation_form_params=array(
 	<div class="ajax-loader-bg">
     </div>
 	<div class="ajax-loader">
-		<img src="<?php echo JUri::base().COMPONENT_PATH.'/assets/images/loader.gif';?>" />
+        <i class="uk-icon-spinner uk-icon-spin uk-icon-large"></i>
     </div>
 </div>
 
@@ -98,14 +116,8 @@ jQuery(function($){
 	
 	var plus='<?php echo (JFactory::getConfig()->get('sef')==1)?'?':'&' ?>';
 	var current_url='<?php echo  htmlspecialchars_decode(JRoute::_("index.php?option=com_dw_donations&view=dwdonationform",false)); ?>';
-	fn_moneydonationwizard_init(current_url,plus);
-	
-	//Doesn't work with listjs
-	/*fn_pagination_click(current_url+plus,form);
-	
-	$(document).ajaxStop(function() {
-        fn_pagination_click(current_url+plus,form);
-    });*/
+	var ngo_url='<?php echo htmlspecialchars_decode(CRoute::_('index.php?option=com_community&view=profile'));?>';
+	fn_moneydonationwizard_init(current_url,plus,<?php echo $isPopup;?>,ngo_url);
 	
 });
 

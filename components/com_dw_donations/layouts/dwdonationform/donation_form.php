@@ -1,11 +1,14 @@
 <?php
 defined('JPATH_BASE') or die;
 
-JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.formvalidator');
 
 $form=$displayData['form'];
 $donor=$displayData['donor'];
 $beneficiary=$displayData['beneficiary'];
+$session_donation_data=$displayData['session_donation_data'];
+$anonymous=(isset($session_donation_data['anonymous']))?$session_donation_data['anonymous']:0;
+$isPopup=( isset ( $displayData['isPopup'] ) ) ? $displayData['isPopup']  : false ;
 
 ?>
 
@@ -45,7 +48,7 @@ $beneficiary=$displayData['beneficiary'];
 
 	<div class="uk-form-row uk-margin-small-top">
 		<div class="uk-form-controls uk-width-1-1">
-		<?php echo $form->getInput('country'); ?>
+		<?php echo $form->getInput('country','',$session_donation_data['country']); ?>
 		</div>
 	</div>
 
@@ -55,7 +58,7 @@ $beneficiary=$displayData['beneficiary'];
 			<div onclick="jQuery('#jform_anonymous').attr('checked',!jQuery('#jform_anonymous').attr('checked'));" class="uk-display-inline-block" data-uk-tooltip title="<?php echo JText::_('COM_DW_DONATIONS_FORM_LBL_DONATION_ANONYMOUS_TOOLTIP'); ?>">
 				<i class="uk-icon-question-circle uk-margin-small-right"></i><?php echo JText::_('COM_DW_DONATIONS_FORM_LBL_DONATION_ANONYMOUS'); ?>
 			</div>
-			<?php echo $form->getInput('anonymous'); ?>
+			<?php echo $form->getInput('anonymous','',$anonymous); ?>
 		</div>
 	</div>	
 
@@ -66,7 +69,7 @@ $beneficiary=$displayData['beneficiary'];
 	<div class="uk-form-row uk-margin-remove">
 
 		<div class="uk-form-controls uk-margin-small-top">
-			<?php echo $form->getInput('amount'); ?>
+			<?php echo $form->getInput('amount','',$session_donation_data['amount']); ?>
 		</div>
 	</div>
 
@@ -103,19 +106,13 @@ $beneficiary=$displayData['beneficiary'];
 	<p class="uk-text-muted uk-text-small uk-margin-remove">
 		<?php echo JText::_('COM_DW_DONATIONS_FORM_VIVA_PAYMENTS'); ?>
 	</p>
+	
+    <?php if(!$isPopup){ ?>
+        <p class="uk-text-center">
+            <a class="payment-step-back"><?php echo JText::_('COM_DW_DONATIONS_FORM_LBL_RETURN'); ?></a>
+        </p>
+    <?php } ?>
 	  
-	<p class="uk-text-center">
-		<a class="payment-step-back"><?php echo JText::_('COM_DW_DONATIONS_FORM_LBL_RETURN'); ?></a>
-	</p>
-	  
-</div>
-
-<div class="donation-modal uk-modal">
-    <div class="uk-modal-dialog">
-    	<a class="uk-modal-close uk-close"></a>
-        <div class="donation-message">
-        </div>    
-    </div>
 </div>
 
 <script type="text/javascript">
@@ -153,9 +150,10 @@ $beneficiary=$displayData['beneficiary'];
 					}
 				},
 				error:function(jqXHR, textStatus, errorThrown){
-					document.open();
+					/*document.open();
 					document.write(errorThrown);
-					document.close();
+					document.close();*/
+					jQuery.UIkit.notify(errorThrown);
 				}
 			});
 		});

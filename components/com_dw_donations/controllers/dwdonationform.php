@@ -38,7 +38,6 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 		$donation=$this->form_validate();
 		if($donation===false){
 			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('error'=>array('error_text'=>JText::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST')),'params'=>$params));
-			//jexit();
 			return false;
 		}
 
@@ -75,9 +74,6 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 		$response = curl_exec($session);
 		curl_close($session);
 		
-		//var_dump($response);
-		/*var_dump(JFactory::getApplication()->input->getCmd('format'));*/
-		
 		// Parse the JSON response
 		try {
 			if(is_object(json_decode($response))){
@@ -87,13 +83,11 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 			}
 		} catch( Exception $e ) {
 			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('error'=>array('error_text'=>$e->getMessage()),'params'=>$params));
-			//jexit();
 			return false;
 		}
 		
 		if(!isset($resultObj->ErrorCode)){
 			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('error'=>array('error_text'=>$response),'params'=>$params));
-			//jexit();
 			return false;
 		}
 		
@@ -108,7 +102,6 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 				$app->setUserState('com_dw_donations.edit.donation.data', $donation);
 				$msg=JText::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST');
 				echo JLayoutHelper::render('dwdonationform.donation_redirect',array('error'=>array('error_text'=>$msg),'params'=>$params));
-				//jexit();
 				return false;
 			}			
 			
@@ -116,21 +109,19 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 			if ($return) {
 				$model->checkin($return);
 			}
-			// Save donation data
-			$payment=json_encode($donation);
-			$app->setUserState('com_dw_donations.payment.data', $payment);
-			
+			// Save donation data in the session
+			$app->setUserState('com_dw_donations.payment.data', $donation);
+			$app->setUserState('com_dw_donations.returnfromviva', false);
+			$app->setUserState('com_dw_donations.donation.data', $donation);
 			// Clear the profile id from the session.
 			$app->setUserState('com_dw_donations.edit.donation.id', null);
 			// Flush the data from the session.
 	        $app->setUserState('com_dw_donations.edit.donation.data', null);
 			
 			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('orderId'=>$orderId,'params'=>$params));
-			//jexit();
 			return false;
 		}else{
 			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('error'=>array('error_text'=>$resultObj->ErrorText),'params'=>$params));
-			//jexit();
 			return false;
 		}
 	}
@@ -207,12 +198,6 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 	
 	private function fn_check_donation_exists($data)
 	{
-		/*$donations = $this->getModel('DwDonationForm', 'Dw_donationsModel');
-		$donation = $donations->getTable();
-		$id=array("id"=>$data['id']);
-		if($donation->load($id)){
-			return false;
-		}*/
 		if($data['id']!=0){
 			return false;
 		}

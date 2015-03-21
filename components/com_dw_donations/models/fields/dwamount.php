@@ -45,7 +45,7 @@ class JFormFieldDwAmount extends JFormField
 		// Start the radio field output.
 		//$html[] = '<fieldset id="' . $this->id . '"' . $class . $required . $autofocus . $disabled . ' >';
 		
-		$default = intval ( $this-> default );
+		$default = (isset($this->value))?(string) $this->value : intval ( $this-> default );
 		
 		// Get the field options.
 		$options = $this->getOptions();
@@ -69,7 +69,7 @@ class JFormFieldDwAmount extends JFormField
 			$onchange = !empty($option->onchange) ? ' onchange="' . $option->onchange . '"' : '';
 			
 			
-			$active = ( $default == intval($option->value) ) ? 'uk-active' : '' ;
+			$active = ( (string) $option->value == (string) $this->value ) ? 'uk-active' : '' ;
 			$html[] = '<a  href="#" data-amount="'.intval($option->value).'" class="uk-button uk-button-large uk-button-blank uk-margin-small-right '.$active.' '.$this->id.'_option option_value_'.intval($option->value).'">'.intval($option->value).'</a >';
 			
 			//$html[] = '<input type="radio" id="' . $this->id . $i . '" name="' . $this->name . '" value="'
@@ -89,11 +89,11 @@ class JFormFieldDwAmount extends JFormField
 
 		$html[] = '<div class="amnt-changer uk-display-inline uk-hidden">';
 		$html[] = '		<a type="button" class="uk-button uk-button-large uk-button-blank amnt-button amnt-decrease uk-active">-</a>';
-		$html[] = '		<input type="number" id="'.$this->id.'_text" class="amnt-value uk-form-large uk-text-center" value="10" maxlength="3" size="3" style="width:56px" />';
+		$html[] = '		<input type="number" id="'.$this->id.'_text" class="amnt-value uk-form-large uk-text-center" value="10" min="1" max="999" size="3" style="width:56px" />';
 		$html[] = '		<a type="button" class="uk-button uk-button-large uk-button-blank amnt-button amnt-increase uk-active">+</a>';
 		$html[] = '</div>';
 		
-		$html[] = '<input type="hidden" name="'.$this->name.'" value="'.$default.'" id="'.$this->id.'_custom" />';
+		$html[] = '<input type="hidden" name="'.$this->name.'" value="'.htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8').'" id="'.$this->id.'_custom" />';
 		
 		// End the radio field output.
 		//$html[] = '</fieldset>';
@@ -200,6 +200,9 @@ class JFormFieldDwAmount extends JFormField
 						$("#'.$this->id.'_text").focusout(function(e) {
                				if($(this).val()==""||$(this).val()==0){
 								$(this).val("10");
+							}
+							if($(this).val()>999){
+								$(this).val("999");
 							}
 							$("#'.$this->id.'_custom").val($(this).val());
 							$("#donate-btn-amount").text("€"+$(this).val());
