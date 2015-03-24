@@ -14,7 +14,11 @@ $ses_url=$app->getUserState('com_dw_donations.donation.refererUrl');
 $ref_url=$jinput->server->get('HTTP_REFERER','','RAW');
 
 if($ses_url!=$ref_url){
-	$ref_url='';
+	if($ref_url=='' || $ses_url==''){
+		$ref_url=$ses_url;
+	}else{
+		$ref_url='';
+	}
 }
 
 if($returnfromviva===false){
