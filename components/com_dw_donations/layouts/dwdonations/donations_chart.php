@@ -22,7 +22,7 @@ $jsonData=json_encode($data);
 
 <div id="chart_div" style="position:relative;width:100%;height:200px;">
 	<div class="ajax-loader">
-		<img src="<?php echo JUri::base().COMPONENT_PATH.'/assets/images/loader.gif';?>" />
+		<i class="uk-icon-spinner uk-icon-spin uk-icon-large"></i>
     </div>
 </div>
 

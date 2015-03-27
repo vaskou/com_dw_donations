@@ -31,6 +31,51 @@ function fn_ajax_controller_calls(func,format,request)
 	});
 }
 
+function fn_ngo_donate_button_submit(redirect_url,order_id)
+{
+	jQuery("#form-moneydonation").submit(function(event) {
+		event.preventDefault();
+		var n_options={status:"danger",timeout:2000,pos:"top-center"};
+		var form = jQuery(this),
+			formData = form.serialize(),
+			formMethod = form.attr("method");				
+		formData += "&ajax=1";	
+		jQuery.ajax({
+			type: formMethod,
+			data: formData,
+			timeout:10000,
+			success:function(response){
+				//console.log(response);
+				
+				try{
+					response=jQuery.parseJSON(response);
+					if(response.success){
+						if(response.data.success){
+							order_id +=response.data.success.orderId;
+							window.location.href=redirect_url+order_id;
+						}else if(response.data.error){
+							jQuery.UIkit.notify(response.data.error.error_text,n_options);
+						}
+					}else{
+						jQuery.UIkit.notify(response.message,n_options);
+					}
+				}catch(e){
+					//console.log(e);
+					document.open();
+					document.write(response);
+					document.close();
+				}
+			},
+			error:function(jqXHR, textStatus, errorThrown){
+				/*document.open();
+				document.write(errorThrown);
+				document.close();*/
+				jQuery.UIkit.notify(errorThrown,n_options);
+			}
+		});
+	});
+}
+
 function fn_ngo_donate_button_click(ngo_id,custom_url,ngo_url)
 {
 	fn_url_change(custom_url);
@@ -178,7 +223,7 @@ function fn_moneydonationwizard_init(current_url,plus,isPopup,ngo_url)
 		fn_url_change(current_url+plus+formData);
 	});
 	
-	fn_ajax_loader();
+	//fn_ajax_loader();
 	
 	jQuery('a[data-lightbox]').lightbox();
 }

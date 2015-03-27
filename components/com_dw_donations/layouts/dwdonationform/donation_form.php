@@ -79,7 +79,7 @@ $isPopup=( isset ( $displayData['isPopup'] ) ) ? $displayData['isPopup']  : fals
 	
 	<div class="uk-form-row uk-margin-top">
 		<div class="uk-form-controls">
-			<button type="submit" class="validate uk-button uk-button-primary uk-button-large uk-width-1-1">
+			<button type="submit" class="validate uk-button uk-button-primary uk-button-large uk-width-1-1" data-uk-modal="{target:'#loading-modal'}">
 				
 				<span class="uk-float-left uk-margin-small-right"><i class="uk-icon-long-arrow-right uk-margin-small-right"></i><?php echo JText::_('COM_DW_DONATIONS_FORM_BTN_DONATE');?></span>
 				<span class="donate-btn-beneficiary uk-float-left"><?php echo $beneficiary['ngo_name'];?></span>
@@ -117,45 +117,30 @@ $isPopup=( isset ( $displayData['isPopup'] ) ) ? $displayData['isPopup']  : fals
 
 <script type="text/javascript">
 	jQuery(document).ready(function($) {
-		jQuery("#form-moneydonation").submit(function(event) {
-			event.preventDefault();
-			var form = jQuery(this),
-				formData = form.serialize(),
-				formMethod = form.attr("method");				
-			formData += "&ajax=1";	
-			jQuery.ajax({
-				type: formMethod,
-				data: formData,
-				timeout:10000,
-				success:function(response){
-					//console.log(response);
-					var n_options={status:"danger",timeout:2000,pos:"top-center"};
-					try{
-						response=jQuery.parseJSON(response);
-						if(response.success){
-							if(response.data.success){
-								var order_id="<?php echo (JFactory::getConfig()->get("sef")==1)?"?":"&" ?>orderId="+response.data.success.orderId;
-								window.location.href="<?php echo  htmlspecialchars_decode(JRoute::_("index.php?option=com_dw_donations&view=dwdonationredirect",false)); ?>"+order_id;
-							}else if(response.data.error){
-								jQuery.UIkit.notify(response.data.error.error_text,n_options);
-							}
-						}else{
-							jQuery.UIkit.notify(response.message,n_options);
-						}
-					}catch(e){
-						//console.log(e);
-						document.open();
-						document.write(response);
-						document.close();
-					}
-				},
-				error:function(jqXHR, textStatus, errorThrown){
-					/*document.open();
-					document.write(errorThrown);
-					document.close();*/
-					jQuery.UIkit.notify(errorThrown);
-				}
-			});
-		});
+		var redirect_url="<?php echo  htmlspecialchars_decode(JRoute::_("index.php?option=com_dw_donations&view=dwdonationredirect",false)); ?>";
+		var order_id="<?php echo (JFactory::getConfig()->get("sef")==1)?"?":"&" ?>orderId=";
+		fn_ngo_donate_button_submit(redirect_url,order_id);
+		
 	});
 </script>
+
+<div id="loading-modal" class="uk-modal" style="display:none;">
+
+	<div class="uk-modal-dialog">
+		
+		<a class="uk-modal-close uk-close"></a>
+		
+		<div class="modal-content" data-uk-observe>
+			
+<!--				<div class="uk-text-center uk-margin-large-top spinner-wrapper">
+					<i class="uk-icon-spinner uk-icon-spin uk-icon-large"></i>
+					<h3><?php echo JText::_('COM_DONORWIZ_MODAL_PLEASE_WAIT');?></h3>
+				</div>-->
+				<div class="layout-wrapper uk-hidden"></div>
+				<?php echo JLayoutHelper::render('dwdonationform.redirect_layout', '' , JPATH_ROOT.COMPONENT_PATH.'/layouts'  ); ?>
+			
+		</div>
+	
+	</div>
+
+</div>
