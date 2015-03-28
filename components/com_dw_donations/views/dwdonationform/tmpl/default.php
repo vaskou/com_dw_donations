@@ -92,8 +92,8 @@ $donation_form_params=array(
 			echo JLayoutHelper::render('dwdonationform.ngo_list',$ngo_list_params,JPATH_ROOT.COMPONENT_PATH.'/layouts'); 
 		}
 	?>
-    <div class="uk-width-medium-1-1">
-        <div class="uk-grid payment-step payment-step-2" style=" <?php if($beneficiary_id==''){ echo 'display:none;';}?>" data-step="2">
+    <div class="uk-width-medium-1-1 payment-step payment-step-2" style=" <?php if($beneficiary_id==''){ echo 'display:none;';}?>" data-step="2">
+        <div class="uk-grid ">
             <div class="uk-width-medium-1-1 ngo_info">
    				<?php echo JLayoutHelper::render('dwdonationform.beneficiary_info',$beneficiary_info_params,JPATH_ROOT.COMPONENT_PATH.'/layouts'); ?>
             </div>
@@ -102,12 +102,8 @@ $donation_form_params=array(
             </div>
         </div>
     </div>
-</div>
-<div class="ngo-loader">
-	<div class="ajax-loader-bg">
-    </div>
-	<div class="ajax-loader">
-        <i class="uk-icon-spinner uk-icon-spin uk-icon-large"></i>
+    <div class="uk-width-medium-1-1 payment-step payment-step-3 uk-hidden" data-step="3">
+    	<?php echo JLayoutHelper::render('dwdonationform.redirect_layout', '' , JPATH_ROOT.COMPONENT_PATH.'/layouts'  ); ?>
     </div>
 </div>
 

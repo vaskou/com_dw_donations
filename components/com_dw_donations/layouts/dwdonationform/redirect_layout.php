@@ -8,3 +8,8 @@ defined('JPATH_BASE') or die;
 <p class="uk-text-muted uk-text-center">
 	<?php echo JText::_('COM_DW_DONATIONS_PAYMENT_REDIRECT_CLICK_HERE');?>
 </p>
+<p class="uk-text-center">
+	<a class="redirect-link" href="">
+		<?php echo JText::_('COM_DW_DONATIONS_PAYMENT_REDIRECT_PAYMENT_PAGE');?>
+	</a>
+</p>
