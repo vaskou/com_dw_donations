@@ -5,7 +5,6 @@ JHtml::stylesheet(Juri::base().'components/com_dw_donations/assets/css/ajax_load
 
 $data=$displayData;
 $userId=$data['userId'];
-$isBeneficiaryDonations=$data['isBeneficiaryDonations'];
 ?>
 
 <?php
@@ -34,7 +33,7 @@ $jsonData=json_encode($data);
       
     // Set a callback to run when the Google Visualization API is loaded.
     google.setOnLoadCallback(drawChart);
-      
+	  
     function drawChart() {
 		var data=<?php echo $jsonData; ?>;
 		var jsonData = jQuery.ajax({
@@ -52,17 +51,38 @@ $jsonData=json_encode($data);
 				jsonData=JSON.stringify(respData);
 			}
 		}catch(e){
-			document.open();
-			document.write(jsonData);
-			document.close();
+			var n_options={status:"danger",timeout:2000,pos:"top-center"};
+			jQuery.UIkit.notify(e,n_options);
 		}
 		  
 		// Create our data table out of JSON data loaded from server.
-		 var data = new google.visualization.DataTable(jsonData);
+		 var chart_data = new google.visualization.DataTable(jsonData);
 		
 		// Instantiate and draw our chart, passing in some options.
-		var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-		chart.draw(data, {width: '100%', height: 200});
+		var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+		var options={
+			width: '100%', 
+			height: 200, 
+			legend:{
+				position: 'bottom', 
+				textStyle: { fontName : 'Open Sans' }
+			},
+			hAxis:{ textStyle: { fontName : 'Open Sans' } },
+			vAxis:{ textStyle: { fontName : 'Open Sans' } },
+			tooltip:{ textStyle: { fontName : 'Open Sans' } },
+			chartArea: {
+				left:'30',
+				right:'30',
+				width:'100%'
+			}
+		};
+		
+		chart.draw(chart_data, options);
+		
+		jQuery(window).resize(function(e) {
+			chart.draw(chart_data, options);
+		});
     }
+	
 
 </script>

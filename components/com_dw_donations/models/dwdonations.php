@@ -74,9 +74,6 @@ class Dw_donationsModelDwDonations extends JModelList
 
 		$limitstart = $app->input->getInt('limitstart', 0);
 		$this->setState('list.start', $limitstart);
-		
-		// DW Set filters from GET request
-		$app->setUserState( $this->context . '.filter', $app->input->getArray());
 
 		if ($list = $app->getUserStateFromRequest($this->context . '.list', 'list', array(), 'array'))
 		{
@@ -231,7 +228,11 @@ class Dw_donationsModelDwDonations extends JModelList
 			}
 		}
 
-		
+		//Filtering state
+		$filter_state = $this->state->get("filter.state");
+		if ($filter_state) {
+			$query->where("a.state = '".$db->escape($filter_state)."'");
+		}
 
 		//Filtering created
 
