@@ -13,6 +13,7 @@ class DwDonationsHelper {
     
 	public function fn_dwdonations_view_init()
 	{
+		$filter_array=array();
 		$user = JFactory::getUser();
 		$userId = $user->get('id');
 		$jinput = JFactory::getApplication()->input;
@@ -23,12 +24,17 @@ class DwDonationsHelper {
 		$this->isBeneficiaryDonations=$isBeneficiaryDonations;
 		
 		if($isBeneficiaryDonations){
-			$jinput->set('beneficiary_id', $userId);
+			$filter_array['beneficiary_id']=$userId;
 		}else{
-			$jinput->set('donor_id', $userId);
+			$filter_array['donor_id']=$userId;
 		}
+
+		$filter_array['state']=1;
+		
+		$jinput->set('filter', $filter_array);
 		$jinput->set('filter_order', 'modified');
 		$jinput->set('filter_order_Dir', 'desc');
+		
 		$this->total = self::fn_get_donations_sum_by_user_id( $userId , $isBeneficiaryDonations );
 		
 	}
@@ -103,11 +109,11 @@ class DwDonationsHelper {
 		$cols=array(
 			array(
 				'type'=>'string',
-				'label'=>'Date'
+				'label'=>JText::_('COM_DW_DONATIONS_GRAPH_DATE')
 			),
 			array(
 				'type'=>'number',
-				'label'=>'Total amount'
+				'label'=>JText::_('COM_DW_DONATIONS_GRAPH_TOTAL_AMOUNT')
 			)
 		);
 		

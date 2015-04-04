@@ -53,7 +53,7 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 		
 		//Set some optional parameters (Full list available here: https://github.com/VivaPayments/API/wiki/Optional-Parameters)
 		$AllowRecurring = 'false'; // This flag will prompt the customer to accept recurring payments in tbe future.
-		$RequestLang = 'en-US'; //This will display the payment page in English (default language is Greek)
+		$RequestLang = 'el-GR'; //This will display the payment page in English (default language is Greek)
 		$SourceCode=8222;
 		$ExpirationDate=date(DATE_ISO8601,strtotime("+ 5 days"));
 		

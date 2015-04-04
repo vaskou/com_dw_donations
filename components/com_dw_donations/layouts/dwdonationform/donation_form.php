@@ -117,45 +117,9 @@ $isPopup=( isset ( $displayData['isPopup'] ) ) ? $displayData['isPopup']  : fals
 
 <script type="text/javascript">
 	jQuery(document).ready(function($) {
-		jQuery("#form-moneydonation").submit(function(event) {
-			event.preventDefault();
-			var form = jQuery(this),
-				formData = form.serialize(),
-				formMethod = form.attr("method");				
-			formData += "&ajax=1";	
-			jQuery.ajax({
-				type: formMethod,
-				data: formData,
-				timeout:10000,
-				success:function(response){
-					//console.log(response);
-					var n_options={status:"danger",timeout:2000,pos:"top-center"};
-					try{
-						response=jQuery.parseJSON(response);
-						if(response.success){
-							if(response.data.success){
-								var order_id="<?php echo (JFactory::getConfig()->get("sef")==1)?"?":"&" ?>orderId="+response.data.success.orderId;
-								window.location.href="<?php echo  htmlspecialchars_decode(JRoute::_("index.php?option=com_dw_donations&view=dwdonationredirect",false)); ?>"+order_id;
-							}else if(response.data.error){
-								jQuery.UIkit.notify(response.data.error.error_text,n_options);
-							}
-						}else{
-							jQuery.UIkit.notify(response.message,n_options);
-						}
-					}catch(e){
-						//console.log(e);
-						document.open();
-						document.write(response);
-						document.close();
-					}
-				},
-				error:function(jqXHR, textStatus, errorThrown){
-					/*document.open();
-					document.write(errorThrown);
-					document.close();*/
-					jQuery.UIkit.notify(errorThrown);
-				}
-			});
-		});
+		var redirect_url="<?php echo  htmlspecialchars_decode("http://demo.vivapayments.com/web/newtransaction.aspx?ref="); ?>";
+		var order_id="";//"<?php echo (JFactory::getConfig()->get("sef")==1)?"?":"&" ?>orderId=";
+		fn_ngo_donate_button_submit(redirect_url,order_id);
+		
 	});
 </script>

@@ -46,13 +46,13 @@ class JFormFieldDwAmount extends JFormField
 		//$html[] = '<fieldset id="' . $this->id . '"' . $class . $required . $autofocus . $disabled . ' >';
 		
 		$default = (isset($this->value))?(string) $this->value : intval ( $this-> default );
-		
+
 		// Get the field options.
 		$options = $this->getOptions();
 
 		$html[] = '<div class="uk-button-group predefined-options-group uk-float-left" data-uk-button-radio>';
 		
-		
+		$other_amount="true";
 		// Build the radio field output.
 		foreach ($options as $i => $option)
 		{
@@ -69,7 +69,12 @@ class JFormFieldDwAmount extends JFormField
 			$onchange = !empty($option->onchange) ? ' onchange="' . $option->onchange . '"' : '';
 			
 			
-			$active = ( (string) $option->value == (string) $this->value ) ? 'uk-active' : '' ;
+			if( (string) $option->value == (string) $this->value ){
+				$active = 'uk-active';
+				$other_amount="false";
+			}else{
+				$active = '' ;
+			}
 			$html[] = '<a  href="#" data-amount="'.intval($option->value).'" class="uk-button uk-button-large uk-button-blank uk-margin-small-right '.$active.' '.$this->id.'_option option_value_'.intval($option->value).'">'.intval($option->value).'</a >';
 			
 			//$html[] = '<input type="radio" id="' . $this->id . $i . '" name="' . $this->name . '" value="'
@@ -89,7 +94,7 @@ class JFormFieldDwAmount extends JFormField
 
 		$html[] = '<div class="amnt-changer uk-display-inline uk-hidden">';
 		$html[] = '		<a type="button" class="uk-button uk-button-large uk-button-blank amnt-button amnt-decrease uk-active">-</a>';
-		$html[] = '		<input type="number" id="'.$this->id.'_text" class="amnt-value uk-form-large uk-text-center" value="10" min="1" max="999" size="3" style="width:56px" />';
+		$html[] = '		<input type="number" id="'.$this->id.'_text" class="amnt-value uk-form-large uk-text-center" value="'.$default.'" min="1" max="999" size="3" style="width:56px" />';
 		$html[] = '		<a type="button" class="uk-button uk-button-large uk-button-blank amnt-button amnt-increase uk-active">+</a>';
 		$html[] = '</div>';
 		
@@ -122,6 +127,10 @@ class JFormFieldDwAmount extends JFormField
 						jQuery(".other-amount,.other-amount-back").click(function(e){
 							
 							e.preventDefault();
+
+							if($(".jform_amount_option.uk-active").length==0){
+								$(".jform_amount_option[data-amount='.$this-> default.']").addClass("uk-active");
+							}
 							
 							$(".other-amount-toggle").toggleClass("uk-hidden");
 							
@@ -129,14 +138,14 @@ class JFormFieldDwAmount extends JFormField
 							
 							$(".amnt-changer").toggleClass("uk-hidden");
 							
-							if(e.target.hasClass("other-amount")){
+							if($(e.target).hasClass("other-amount")){
 								amount=$(".amnt-value").val();
 							
 								$("#'.$this->id.'_custom").val(amount);
 
 								$("#donate-btn-amount").text("€"+amount);
 							}
-							if(e.target.hasClass("other-amount-back")){
+							if($(e.target).hasClass("other-amount-back")){
 								amount=$(".jform_amount_option.uk-active").attr("data-amount");
 							
 								$("#'.$this->id.'_custom").val(amount);
@@ -145,6 +154,10 @@ class JFormFieldDwAmount extends JFormField
 							}
 			
 						});
+						
+						if('.$other_amount.'==true){
+							jQuery(".other-amount").click();
+						}
 
 						jQuery(".amnt-button").click(function(){
 							

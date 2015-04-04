@@ -1,7 +1,7 @@
 .ngo-loader{
 	display:none;
 	position:fixed;
-	z-index:100000;
+	z-index:1009;
 	top:0;
 	bottom:0;
 	left:0;
@@ -25,7 +25,7 @@
 	min-height:62px;
 	width:62px;
 	background:#fff;
-	border:2px solid #ccc;
+	/*border:2px solid #ccc;*/
 	/*display:none;*/
 }
 
