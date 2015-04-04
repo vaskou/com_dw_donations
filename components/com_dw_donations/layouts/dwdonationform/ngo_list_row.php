@@ -8,12 +8,13 @@ $ngos=$displayData['ngo_list'];
 
 <?php foreach($ngos as $id=>$ngo) : ?>
 
-<li class="ngo-row " data-benef-id="<?php echo $id;?>">
-    <div class="uk-grid uk-margin-small-top">
+<li class="ngo-row uk-panel uk-panel-box uk-panel-blank" data-benef-id="<?php echo $id;?>">
+    
+	<div class="uk-grid uk-margin-small">
     
         <div class="uk-width-2-10 ">
-            <div class="list-img uk-thumbnail">
-                <img class="ngo_avatar" src="<?php echo $ngo['ngo_avatar'];?>"  alt="<?php echo $ngo['ngo_name']; ?>" title="<?php echo $ngo['ngo_name']; ?>" />
+            <div class="list-img">
+                <img class="ngo_avatar uk-thumbnail uk-border-circle" src="<?php echo $ngo['ngo_avatar'];?>"  alt="<?php echo $ngo['ngo_name']; ?>" title="<?php echo $ngo['ngo_name']; ?>" />
             </div>
         </div>
         
