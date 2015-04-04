@@ -7,9 +7,9 @@
 	color:#e5097f;
 }
 
-#ngo_list .uk-list-line > li{
+/* #ngo_list .uk-list-line > li{
 	padding-bottom:5px;
-}
+} */
 
 .invalid{
 	border-color: #dc8d99 !important;

@@ -36,7 +36,7 @@ $total=$displayData['total'];
 	$item->currency_sign = '€';
 ?>
 
-<li>
+<li class="uk-panel uk-panel-box uk-panel-blank uk-panel-border uk-panel-shadow" >
 	<div class="uk-grid">
 	
 		<div class="uk-width-3-4">
