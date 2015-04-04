@@ -31,7 +31,7 @@ $jinput = JFactory::getApplication()->input;
 				</div>
             </div>
             
-			<div id="list_filters" class="uk-form-row uk-grid uk-grid-small uk-hidden-small" data-uk-margin>
+			<div id="list_filters" class="uk-form-row uk-grid uk-grid-small uk-hidden-small uk-margin-small-top" data-uk-margin>
             	<div class="uk-width-small-1-1">
             		<input class="search uk-form-large uk-width" placeholder="<?php echo JText::_('COM_DW_DONATIONS_FORM_LBL_SEARCH');?>" type="text" />
                 </div>
@@ -46,7 +46,7 @@ $jinput = JFactory::getApplication()->input;
                 </div>
             </div>
             
-			<div class="ngo-list-wrapper uk-margin-large-top" id="ngo_list_wrapper">
+			<div class="ngo-list-wrapper uk-margin-top" id="ngo_list_wrapper">
                 
 				<div id="ngo_list" class="ngos-list">
                 	<ul class="list uk-list uk-list-line">
