@@ -126,7 +126,7 @@ function fn_url_change(data)
 
 function fn_onpopstate()
 {
-	var popped = ('state' in window.history);
+	var popped = false;
 	var initialURL = location.href;
 	jQuery(window).bind('popstate', function(event) {
 		var initialPop = !popped && location.href == initialURL;
