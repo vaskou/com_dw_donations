@@ -31,6 +31,11 @@ class DwDonationsHelper {
 
 		$filter_array['state']=1;
 		
+		$input_filters=$jinput->get('filter','','ARRAY');
+		if(is_array($input_filters)){
+			$filter_array=array_merge($filter_array,$input_filters);
+		}
+		
 		$jinput->set('filter', $filter_array);
 		$jinput->set('filter_order', 'modified');
 		$jinput->set('filter_order_Dir', 'desc');

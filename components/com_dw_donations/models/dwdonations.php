@@ -251,12 +251,13 @@ class Dw_donationsModelDwDonations extends JModelList
 		//Checking "_dateformat"
 		$filter_modified_from = $this->state->get("filter.modified_from_dateformat");
 		if ($filter_modified_from && preg_match("/^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/", $filter_modified_from) && date_create($filter_modified_from) ) {
-			$query->where("a.modified >= '".$db->escape($filter_modified_from)."'");
+			$query->where("a.modified >= '".$db->escape($filter_modified_from.' 00:00:00')."'");
 		}
 		$filter_modified_to = $this->state->get("filter.modified_to_dateformat");
 		if ($filter_modified_to && preg_match("/^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/", $filter_modified_to) && date_create($filter_modified_to) ) {
-			$query->where("a.modified <= '".$db->escape($filter_modified_to)."'");
+			$query->where("a.modified <= '".$db->escape($filter_modified_to.' 23:59:59')."'");
 		}
+		
 
 		//Filtering donor_id
 		$filter_donor_id = $this->state->get("filter.donor_id");
