@@ -35,44 +35,40 @@ class DwDonationsHelper {
 		if(is_array($input_filters)){
 			$filter_array=array_merge($filter_array,$input_filters);
 		}
-		
+var_dump($input_filters);
 		$jinput->set('filter', $filter_array);
 		$jinput->set('filter_order', 'modified');
 		$jinput->set('filter_order_Dir', 'desc');
 		
-		$this->total = self::fn_get_donations_sum_by_user_id( $userId , $isBeneficiaryDonations );
+		$this->total=self::fn_get_donations_sum_by_user_id($filter_array);
+		
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dw_donations/models', 'Dw_donationsModel');
+
+		$donationsModel = JModelLegacy::getInstance('DwDonations', 'Dw_donationsModel',array('ignore_request' => true));
+		foreach ($filter_array as $name => $value)
+		{
+			$donationsModel->setState('filter.' . $name, $value);
+		}
+		$result=$donationsModel->getAnnualSum();	
+	}
+	
+	public function fn_get_donations_sum_by_user_id($filter_array=array())
+	{
+		if(empty($filter_array)){
+			return '0';
+		}
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dw_donations/models', 'Dw_donationsModel');
+
+		$donationsModel = JModelLegacy::getInstance('DwDonations', 'Dw_donationsModel',array('ignore_request' => true));
+		foreach ($filter_array as $name => $value)
+		{
+			$donationsModel->setState('filter.' . $name, $value);
+		}
+		$result=$donationsModel->getSum();
+		return $result;
 		
 	}
 	
-	public function fn_get_donations_sum_by_user_id($user_id,$is_beneficiary,$date=0)
-	{
-		$db = JFactory::getDBO();
-		
-		$query="SELECT SUM(amount) AS total_amount FROM #__dw_donations WHERE state=1";
-		
-		if($is_beneficiary){
-			$query.=" AND beneficiary_id=".$user_id;
-		}else{
-			$query.=" AND donor_id=".$user_id;
-		}
-		
-		if($date){
-			if(isset($date['month']) && $date['month']){
-				$query.=" AND EXTRACT(MONTH FROM modified)=".$date['month'];
-			}
-			if(isset($date['year'])  && $date['year']){
-				$query.=" AND EXTRACT(YEAR FROM modified)=".$date['year'] ;
-			}
-		}
-		
-		$db->setQuery($query);
-        $db->Query();
-		$result = $db->loadResult();
-		if(empty($result)){
-			$result=0;
-		}
-		return $result;
-	}
 	
 	public function fn_get_annually_donations_sum_by_user_id($user_id,$is_beneficiary,$date=0)
 	{

@@ -303,6 +303,27 @@ class Dw_donationsModelDwDonations extends JModelList
 
 		return $items;
 	}
+	public function getSum( )
+    {
+        $this -> setState ('list.select', 'SUM(amount) as sum');
+       
+        $row = parent::getItems() ;
+       
+        $sum = $row[0] -> sum ;
+
+        return $sum;
+    }
+	
+	public function getAnnualSum( )
+    {
+        $this -> setState ('list.select', 'DATE_FORMAT(modified,"%Y") as year,DATE_FORMAT(modified,"%m") as month,SUM(amount) AS total_amount');
+       
+        $row = parent::getItems() ;
+		var_dump($row);
+		/*$sum = $row[0] -> sum ;
+
+        return $sum;*/
+    }
 
 	/**
 	 * Overrides the default function to check Date fields format, identified by
