@@ -21,7 +21,7 @@ $donorwizUrl = new DonorwizUrl();
 	<?php echo $filters['filter_date_start']->input; ?>
     <?php echo $filters['filter_date_end']->input; ?>
     <button type="submit" class="uk-button uk-button-primary uk-button-large"><?php echo JText::_('COM_DW_DONATIONS_FILTER_LABEL_BUTTON'); ?></button>
-    <?php echo  $pagination->getLimitBox(); ?>
+	<?php echo  $pagination->getLimitBox(); ?>
 </form>    
     
 <?php endif; ?>

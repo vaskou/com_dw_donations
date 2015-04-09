@@ -290,6 +290,13 @@ class Dw_donationsModelDwDonations extends JModelList
 		{
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
 		}
+		
+		$groupBy = $this->state->get('groupby');
+		if(!empty($groupBy)){
+			foreach($groupBy as $group){
+				$query->group($db->escape($group));
+			}
+		}
 
 		return $query;
 	}
@@ -314,15 +321,13 @@ class Dw_donationsModelDwDonations extends JModelList
         return $sum;
     }
 	
-	public function getAnnualSum( )
+	public function getAnnualSum( $groupBy=array() )
     {
-        $this -> setState ('list.select', 'DATE_FORMAT(modified,"%Y") as year,DATE_FORMAT(modified,"%m") as month,SUM(amount) AS total_amount');
-       
+        $this -> setState ('list.select', 'DATE_FORMAT(modified,"%Y") as year,DATE_FORMAT(modified,"%m") as month,DATE_FORMAT(modified,"%d") as day,SUM(amount) AS total_amount');
+		$this -> setState ('groupby',$groupBy);
         $row = parent::getItems() ;
-		var_dump($row);
-		/*$sum = $row[0] -> sum ;
 
-        return $sum;*/
+        return $row;
     }
 
 	/**
