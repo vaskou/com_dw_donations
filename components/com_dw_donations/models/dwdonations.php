@@ -251,12 +251,13 @@ class Dw_donationsModelDwDonations extends JModelList
 		//Checking "_dateformat"
 		$filter_modified_from = $this->state->get("filter.modified_from_dateformat");
 		if ($filter_modified_from && preg_match("/^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/", $filter_modified_from) && date_create($filter_modified_from) ) {
-			$query->where("a.modified >= '".$db->escape($filter_modified_from)."'");
+			$query->where("a.modified >= '".$db->escape($filter_modified_from.' 00:00:00')."'");
 		}
 		$filter_modified_to = $this->state->get("filter.modified_to_dateformat");
 		if ($filter_modified_to && preg_match("/^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/", $filter_modified_to) && date_create($filter_modified_to) ) {
-			$query->where("a.modified <= '".$db->escape($filter_modified_to)."'");
+			$query->where("a.modified <= '".$db->escape($filter_modified_to.' 23:59:59')."'");
 		}
+		
 
 		//Filtering donor_id
 		$filter_donor_id = $this->state->get("filter.donor_id");
@@ -289,6 +290,13 @@ class Dw_donationsModelDwDonations extends JModelList
 		{
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
 		}
+		
+		$groupBy = $this->state->get('groupby');
+		if(!empty($groupBy)){
+			foreach($groupBy as $group){
+				$query->group($db->escape($group));
+			}
+		}
 
 		return $query;
 	}
@@ -302,6 +310,25 @@ class Dw_donationsModelDwDonations extends JModelList
 
 		return $items;
 	}
+	public function getSum( )
+    {
+        $this -> setState ('list.select', 'SUM(amount) as sum');
+       
+        $row = parent::getItems() ;
+       
+        $sum = $row[0] -> sum ;
+
+        return $sum;
+    }
+	
+	public function getAnnualSum( $groupBy=array() )
+    {
+        $this -> setState ('list.select', 'DATE_FORMAT(modified,"%Y") as year,DATE_FORMAT(modified,"%m") as month,DATE_FORMAT(modified,"%d") as day,SUM(amount) AS total_amount');
+		$this -> setState ('groupby',$groupBy);
+        $row = parent::getItems() ;
+
+        return $row;
+    }
 
 	/**
 	 * Overrides the default function to check Date fields format, identified by

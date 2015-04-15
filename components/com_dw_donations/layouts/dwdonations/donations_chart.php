@@ -12,9 +12,14 @@ $userId=$data['userId'];
 $current_month=0;//JFactory::getDate('now')->format('m');
 $current_year=JFactory::getDate('now')->format('Y');
 
-$date=array('year'=>$current_year,'month'=>$current_month);
 
-$data=array(JSession::getFormToken()=>'1','date'=>$date);
+$filter_array=array(
+	'modified_from_dateformat'=>$current_year.'-01-01',
+	'state'=>'1'
+);
+
+$data=array(JSession::getFormToken()=>'1','filter_array'=>$filter_array,'user_id'=>$userId);
+
 $jsonData=json_encode($data);
 
 ?>
@@ -46,8 +51,10 @@ $jsonData=json_encode($data);
 		
 		try{
 			response=jQuery.parseJSON(jsonData);
+			
 			if(response.success){
 				respData=response.data;
+				console.log(respData);
 				jsonData=JSON.stringify(respData);
 			}
 		}catch(e){

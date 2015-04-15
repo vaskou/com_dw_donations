@@ -22,109 +22,108 @@ class DwDonationsHelper {
 		$isBeneficiaryDonations = $donorwizUser-> isBeneficiary('com_dw_donations');
 		
 		$this->isBeneficiaryDonations=$isBeneficiaryDonations;
-		
-		if($isBeneficiaryDonations){
-			$filter_array['beneficiary_id']=$userId;
-		}else{
-			$filter_array['donor_id']=$userId;
-		}
 
 		$filter_array['state']=1;
 		
+		$input_filters=$jinput->get('filter','','ARRAY');
+		if(is_array($input_filters)){
+			$filter_array=array_merge($filter_array,$input_filters);
+		}
+
 		$jinput->set('filter', $filter_array);
 		$jinput->set('filter_order', 'modified');
 		$jinput->set('filter_order_Dir', 'desc');
 		
-		$this->total = self::fn_get_donations_sum_by_user_id( $userId , $isBeneficiaryDonations );
+		$this->total=self::fn_get_donations_sum_by_user_id($filter_array,$userId);
+
+	}
+	
+	public function fn_get_donations_sum_by_user_id($filter_array=array(),$user_id=0)
+	{
+		$donorwizUser = new DonorwizUser ($user_id) ;
+		$isBeneficiaryDonations = $donorwizUser-> isBeneficiary('com_dw_donations');
+		$isDonor = $donorwizUser -> isDonor();
+		
+		if($isBeneficiaryDonations){
+			$filter_array['beneficiary_id']=$user_id;
+		}elseif($isDonor){
+			$filter_array['donor_id']=$user_id;
+		}else{
+			$filter_array=array();
+		}
+		
+		if(empty($filter_array)){
+			return '0';
+		}
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dw_donations/models', 'Dw_donationsModel');
+
+		$donationsModel = JModelLegacy::getInstance('DwDonations', 'Dw_donationsModel',array('ignore_request' => true));
+		foreach ($filter_array as $name => $value)
+		{
+			$donationsModel->setState('filter.' . $name, $value);
+		}
+		$result=$donationsModel->getSum();
+		return $result;
 		
 	}
 	
-	public function fn_get_donations_sum_by_user_id($user_id,$is_beneficiary,$date=0)
+	public function fn_get_annually_donations_sum_by_user_id($filter_array=array(),$user_id=0)
 	{
-		$db = JFactory::getDBO();
+		$donorwizUser = new DonorwizUser ($user_id) ;
+		$isBeneficiaryDonations = $donorwizUser-> isBeneficiary('com_dw_donations');
+		$isDonor = $donorwizUser -> isDonor();
 		
-		$query="SELECT SUM(amount) AS total_amount FROM #__dw_donations WHERE state=1";
-		
-		if($is_beneficiary){
-			$query.=" AND beneficiary_id=".$user_id;
+		if($isBeneficiaryDonations){
+			$filter_array['beneficiary_id']=$user_id;
+		}elseif($isDonor){
+			$filter_array['donor_id']=$user_id;
 		}else{
-			$query.=" AND donor_id=".$user_id;
+			$filter_array=array();
 		}
 		
-		if($date){
-			if(isset($date['month']) && $date['month']){
-				$query.=" AND EXTRACT(MONTH FROM modified)=".$date['month'];
-			}
-			if(isset($date['year'])  && $date['year']){
-				$query.=" AND EXTRACT(YEAR FROM modified)=".$date['year'] ;
-			}
+		if(empty($filter_array)){
+			return '0';
 		}
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dw_donations/models', 'Dw_donationsModel');
+
+		$donationsModel = JModelLegacy::getInstance('DwDonations', 'Dw_donationsModel',array('ignore_request' => true));
 		
-		$db->setQuery($query);
-        $db->Query();
-		$result = $db->loadResult();
-		if(empty($result)){
-			$result=0;
+		foreach ($filter_array as $name => $value)
+		{
+			$donationsModel->setState('filter.' . $name, $value);
 		}
+		$result=$donationsModel->getAnnualSum(array('YEAR(modified)','MONTH(modified)','DAY(modified)'));
 		return $result;
 	}
-	
-	public function fn_get_annually_donations_sum_by_user_id($user_id,$is_beneficiary,$date=0)
-	{
-		$db = JFactory::getDBO();
-		
-		$query="SELECT DATE_FORMAT(modified,'%Y') as year,DATE_FORMAT(modified,'%m') as month,SUM(amount) AS total_amount FROM #__dw_donations WHERE state=1 ";
-		
-		if($is_beneficiary){
-			$query.=" AND beneficiary_id=".$user_id;
-		}else{
-			$query.=" AND donor_id=".$user_id;
-		}
 
-		if($date){
-			if(isset($date['month']) && $date['month']){
-				$query.=" AND EXTRACT(MONTH FROM modified)=".$date['month'];
-			}
-			if(isset($date['year'])  && $date['year']){
-				$query.=" AND EXTRACT(YEAR FROM modified)=".$date['year'] ;
-			}
-		}
-		
-		$query.=" GROUP BY YEAR(modified),MONTH(modified) ";
-
-		$db->setQuery($query);
-        $db->Query();
-		$result = $db->loadAssocList();
-		
-		return $result;
-	}
-	
-	public function fn_annually_chart_data_format($user_id,$is_beneficiary,$date=0)
+	public function fn_annually_chart_data_format($filter_array=array(),$user_id=0)
 	{
-		$data=self::fn_get_annually_donations_sum_by_user_id($user_id,$is_beneficiary,$date);
+		$data=self::fn_get_annually_donations_sum_by_user_id($filter_array,$user_id);
 		
 		$cols=array();
 		$rows=array();
 		
+		foreach($data as $k=>$v){
+			$year=$v->year;
+			$date='Date('.$v->year.','.($v->month - 1).','.$v->day.')';
+			$rows[]=array(
+				'c'=>array(					
+					array('v'=>$date),
+					array('v'=>$v->total_amount)
+				)
+			);
+		}
+		
 		$cols=array(
 			array(
-				'type'=>'string',
+				'type'=>'date',
 				'label'=>JText::_('COM_DW_DONATIONS_GRAPH_DATE')
 			),
 			array(
 				'type'=>'number',
-				'label'=>JText::_('COM_DW_DONATIONS_GRAPH_TOTAL_AMOUNT')
+				'label'=>JText::_('COM_DW_DONATIONS_GRAPH_TOTAL_AMOUNT').' '.$year
 			)
 		);
-		
-		foreach($data as $k=>$v){
-			$rows[]=array(
-				'c'=>array(					
-					array('v'=>$v['year'].'-'.$v['month']),
-					array('v'=>$v['total_amount'])
-				)
-			);
-		}
 		
 		$result=array('cols'=>$cols,'rows'=>$rows);
 		

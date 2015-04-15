@@ -1,6 +1,10 @@
 <?php
 
 defined('_JEXEC') or die;
+$lang = JFactory::getLanguage();
+$lang->load('com_dw_donations');
+$lang->load('com_donorwiz');
+
 $app=JFactory::getApplication();
 
 $current_url=JURI::getInstance()->toString();

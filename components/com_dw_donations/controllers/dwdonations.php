@@ -33,15 +33,10 @@ class Dw_donationsControllerDwDonations extends Dw_donationsController
 		
 		$jinput = JFactory::getApplication()->input;
 		
-		$user = JFactory::getUser();
-		$userId = $user->get('id');
+		$filter_array=$jinput->get('filter_array',array(),'ARRAY');
+		$user_id=$jinput->get('user_id',0,'INT');
 		
-		$donorwizUser=new DonorwizUser($userId);
-		$isBeneficiaryDonations = $donorwizUser-> isBeneficiary('com_dw_donations');
-		
-		$date=$jinput->get('date','0','array');
-		
-		$year=DwDonationsHelper::fn_annually_chart_data_format($userId,$isBeneficiaryDonations,$date);
+		$year=DwDonationsHelper::fn_annually_chart_data_format($filter_array,$user_id);
 		
 		echo new JResponseJson($year);
 		exit;		

@@ -184,7 +184,10 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 			return JText::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST');
 		}
 		
-		if(!self::fn_validate_donor_and_beneficiary($data)){
+		if(!self::fn_validate_donor($data)){
+			return JText::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST');
+		}
+		if(!self::fn_validate_beneficiary($data)){
 			return JText::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST');
 		}
 		if(!self::fn_check_donations_amount($data)){
@@ -204,11 +207,10 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 		return true;
 	}
 	
-	private function fn_validate_donor_and_beneficiary($data)
+	private function fn_validate_donor($data)
 	{		
 		$donor_id=$data['donor_id'];
 		$created_by=$data['created_by'];
-		$beneficiary_id=$data['beneficiary_id'];
 		
 		$user_id = JFactory::getUser()->get('id');
 		
@@ -221,7 +223,19 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 		}
 		
 		$donorwizUser=new DonorwizUser($donor_id);
-		$donor_is_beneficiary = $donorwizUser-> isBeneficiary('com_dw_donations');
+		$donor_is_beneficiary = $donorwizUser-> isBeneficiary('com_donorwiz');
+		
+		if($donor_is_beneficiary)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private function fn_validate_beneficiary($data)
+	{		
+		$beneficiary_id=$data['beneficiary_id'];
 		
 		$table   = JUser::getTable();
 		
@@ -232,7 +246,7 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 			$beneficiary_is_beneficiary = $donorwizUser-> isBeneficiary('com_dw_donations');
 		}
 		
-		if(!$beneficiary_exists || $donor_is_beneficiary || !$beneficiary_is_beneficiary)
+		if(!$beneficiary_exists || !$beneficiary_is_beneficiary)
 		{
 			return false;
 		}

@@ -16,6 +16,10 @@ $userId = $user->get('id');
 
 $data = array( 'items'=>$this->items,'pagination'=>$this->pagination , 'total'=> $this->total );
 
+$filter_data = array( 'filterForm'=>$this->filterForm, 'pagination'=>$this->pagination );
+
+echo JLayoutHelper::render('dwdonations.donations_filters', $filter_data, JPATH_ROOT.COMPONENT_PATH.'/layouts');
+
 if($this->isBeneficiaryDonations){
 	echo JLayoutHelper::render('dwdonations.beneficiary_donations_list', $data, JPATH_ROOT.COMPONENT_PATH.'/layouts');
 }else{
