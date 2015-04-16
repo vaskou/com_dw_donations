@@ -22,6 +22,12 @@ class DwDonationsHelper {
 		$isBeneficiaryDonations = $donorwizUser-> isBeneficiary('com_dw_donations');
 		
 		$this->isBeneficiaryDonations=$isBeneficiaryDonations;
+		
+		if($isBeneficiaryDonations){
+			$filter_array['beneficiary_id']=$userId;
+		}else{
+			$filter_array['donor_id']=$userId;
+		}
 
 		$filter_array['state']=1;
 		
@@ -63,6 +69,9 @@ class DwDonationsHelper {
 			$donationsModel->setState('filter.' . $name, $value);
 		}
 		$result=$donationsModel->getSum();
+		
+		$result=(!empty($result))?$result:'0';
+		
 		return $result;
 		
 	}
