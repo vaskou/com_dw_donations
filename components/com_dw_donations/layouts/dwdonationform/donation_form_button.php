@@ -40,7 +40,8 @@ $popup_params=array (
 	'layoutName' => 'dwdonationform.donation_form_view',
 	'layoutParams' => array( 'beneficiary_id' => $beneficiary_id, 'isPopup' => $isPopup ),
 	'styles' => $styles,
-	'scripts' => $scripts
+	'scripts' => $scripts,
+	'popupParams'=>array('header'=>JText::_('COM_DW_DONATIONS_BTN_DONATE'))
 );
 
 echo JLayoutHelper::render('popup.popup-button',$popup_params,JPATH_ROOT.'/components/com_donorwiz/layouts');
