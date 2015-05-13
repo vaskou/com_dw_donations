@@ -5,7 +5,7 @@ defined('JPATH_BASE') or die;
 $items = (isset($displayData['items'])) ? $displayData['items'] : array();
 $pagination = $displayData['pagination'];
 $total = $displayData['total'];
-$vivaURL = 'http://demo.vivapayments.com/web/receipt?tid=';
+$vivaURL = VIVA_URL.'/web/receipt?tid=';
 
 ?>
 

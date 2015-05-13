@@ -42,9 +42,9 @@ if($returnfromviva===false){
 	<?php echo JText::_('COM_DW_DONATIONS_PAYMENT_REDIRECT_CLICK_HERE');?>
 </p>
 <p class="uk-text-center">
-	<a href="http://demo.vivapayments.com/web/newtransaction.aspx?ref=<?php echo $jinput->get('orderId','','cmd');?>">
+	<a href="<?php echo VIVA_URL; ?>/web/newtransaction.aspx?ref=<?php echo $jinput->get('orderId','','cmd');?>">
 		<?php echo JText::_('COM_DW_DONATIONS_PAYMENT_REDIRECT_PAYMENT_PAGE');?>
 	</a>
 </p>
 
-<?php header('Refresh: 3; URL=http://demo.vivapayments.com/web/newtransaction.aspx?ref='.$jinput->get('orderId','','cmd')); ?>
+<?php header('Refresh: 3; URL='.VIVA_URL.'/web/newtransaction.aspx?ref='.$jinput->get('orderId','','cmd')); ?>

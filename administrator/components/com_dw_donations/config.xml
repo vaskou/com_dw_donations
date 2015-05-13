@@ -11,6 +11,10 @@
             menu_published="0"
             filter="raw"
             multiple="true" />
+			<field name="viva_url" type="URL"            
+            	label="COM_DW_DONATIONS_FORM_LBL_VIVA_URL"
+	            description="COM_DW_DONATIONS_FORM_DESC_VIVA_URL" 
+			 />
     </fieldset>
     <fieldset 
         name="permissions"

@@ -93,8 +93,7 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 	private function fn_viva_request_authorization($transactionId)
 	{
 		
-		$request =  'http://demo.vivapayments.com/api/transactions/';	// demo environment URL
-		//$request =  'https://www.vivapayments.com/api/transactions';	// production environment URL
+		$request =  VIVA_URL.'/api/transactions/';	
 		
 		// Your merchant ID and API Key can be found in the 'Security' settings on your profile.
 		$MerchantId = '1ef183eb-94de-44dd-b682-3c404f74a267';

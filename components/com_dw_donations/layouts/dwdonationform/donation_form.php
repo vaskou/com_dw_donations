@@ -117,7 +117,7 @@ $isPopup=( isset ( $displayData['isPopup'] ) ) ? $displayData['isPopup']  : fals
 
 <script type="text/javascript">
 	jQuery(document).ready(function($) {
-		var redirect_url="<?php echo  htmlspecialchars_decode("http://demo.vivapayments.com/web/newtransaction.aspx?ref="); ?>";
+		var redirect_url="<?php echo  htmlspecialchars_decode(VIVA_URL."/web/newtransaction.aspx?ref="); ?>";
 		var order_id="";//"<?php echo (JFactory::getConfig()->get("sef")==1)?"?":"&" ?>orderId=";
 		fn_ngo_donate_button_submit(redirect_url,order_id);
 		

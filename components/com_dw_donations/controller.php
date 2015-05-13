@@ -11,6 +11,19 @@
 defined('_JEXEC') or die;
 define('COMPONENT_PATH','/components/com_dw_donations');
 
+$viva_url = JComponentHelper::getParams('com_dw_donations')->get('viva_url');
+define('VIVA_URL',$viva_url);
+
+jimport('joomla.log.log');
+JLog::addLogger(
+	array(
+		'text_file' => 'com_dw_donations.errors.php',
+		'text_file_path' => 'logs'
+	),
+	JLog::ALL,
+	array('donate')
+);
+
 jimport('joomla.application.component.controller');
 include_once JPATH_ROOT.'/components/com_community/libraries/core.php';
 require_once JPATH_ROOT . COMPONENT_PATH . '/helpers/dwdonationformhelper.php';
