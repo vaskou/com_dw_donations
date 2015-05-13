@@ -34,13 +34,14 @@ $popup_params=array (
 	'isAjax' => true,
 	'buttonLink' => JRoute::_('index.php?option=com_dw_donations&view=dwdonationform',false),
 	'buttonText' => JText::_('COM_DW_DONATIONS_BTN_DONATE'),
-	'buttonIcon' => '',
+	'buttonIcon' => 'uk-icon-euro',
 	'buttonType' => 'uk-hidden-small uk-button uk-button-primary',
 	'layoutPath' => JPATH_ROOT .'/components/com_dw_donations/layouts',
 	'layoutName' => 'dwdonationform.donation_form_view',
 	'layoutParams' => array( 'beneficiary_id' => $beneficiary_id, 'isPopup' => $isPopup ),
 	'styles' => $styles,
-	'scripts' => $scripts
+	'scripts' => $scripts,
+	'popupParams'=>array('header'=>JText::_('COM_DW_DONATIONS_BTN_DONATE'))
 );
 
 echo JLayoutHelper::render('popup.popup-button',$popup_params,JPATH_ROOT.'/components/com_donorwiz/layouts');
