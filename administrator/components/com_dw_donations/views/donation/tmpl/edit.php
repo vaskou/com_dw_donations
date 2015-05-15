@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     1.0.0
+ * @version     1.1.0
  * @package     com_dw_donations
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -127,6 +127,10 @@ $document->addStyleSheet('components/com_dw_donations/assets/css/dw_donations.cs
 			<div class="control-group">
 				<div class="control-label"><?php echo $this->form->getLabel('anonymous'); ?></div>
 				<div class="controls"><?php echo $this->form->getInput('anonymous'); ?></div>
+			</div>
+			<div class="control-group">
+				<div class="control-label"><?php echo $this->form->getLabel('payment_method'); ?></div>
+				<div class="controls"><?php echo $this->form->getInput('payment_method'); ?></div>
 			</div>
 			<div class="control-group">
 				<div class="control-label"><?php echo $this->form->getLabel('order_code'); ?></div>

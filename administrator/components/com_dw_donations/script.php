@@ -23,8 +23,8 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Method called before install/update the component. Note: This method won't be called during uninstall process.
 	 *
-	 * @param   string  $type    Type of process [install | update]
-	 * @param   mixed   $parent  Object who called this method
+	 * @param   string $type   Type of process [install | update]
+	 * @param   mixed  $parent Object who called this method
 	 *
 	 * @return boolean True if the process should continue, false otherwise
 	 */
@@ -53,7 +53,7 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Method to install the component
 	 *
-	 * @param   mixed  $parent  Object who called this method.
+	 * @param   mixed $parent Object who called this method.
 	 *
 	 * @return void
 	 *
@@ -69,7 +69,7 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Method to update the DB of the component
 	 *
-	 * @param   mixed  $parent  Object who started the upgrading process
+	 * @param   mixed $parent Object who started the upgrading process
 	 *
 	 * @return void
 	 *
@@ -107,8 +107,8 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Process a table
 	 *
-	 * @param   JApplicationCms   $app    Application object
-	 * @param   SimpleXMLElement  $table  Table to process
+	 * @param   JApplicationCms  $app   Application object
+	 * @param   SimpleXMLElement $table Table to process
 	 *
 	 * @return void
 	 *
@@ -143,7 +143,7 @@ class com_dw_donationsInstallerScript
 							);
 							$table_added = true;
 						}
-						catch ( Exception $ex )
+						catch (Exception $ex)
 						{
 							$app->enqueueMessage(
 								JText::sprintf(
@@ -171,7 +171,7 @@ class com_dw_donationsInstallerScript
 								)
 							);
 						}
-						catch ( Exception $ex )
+						catch (Exception $ex)
 						{
 							$app->enqueueMessage(
 								JText::sprintf(
@@ -198,7 +198,7 @@ class com_dw_donationsInstallerScript
 								);
 								$table_added = true;
 							}
-							catch ( Exception $ex )
+							catch (Exception $ex)
 							{
 								$app->enqueueMessage(
 									JText::sprintf(
@@ -221,7 +221,7 @@ class com_dw_donationsInstallerScript
 							JText::sprintf('Table `%s` was successfully deleted', $table['table_name'])
 						);
 					}
-					catch ( Exception $ex )
+					catch (Exception $ex)
 					{
 						$app->enqueueMessage(
 							JText::sprintf(
@@ -248,7 +248,7 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Checks if a certain exists on the current database
 	 *
-	 * @param   string  $table_name  Name of the table
+	 * @param   string $table_name Name of the table
 	 *
 	 * @return boolean True if it exists, false if it does not.
 	 */
@@ -264,7 +264,7 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Generates a 'CREATE TABLE' statement for the tables passed by argument.
 	 *
-	 * @param   SimpleXMLElement  $table  Table of the database
+	 * @param   SimpleXMLElement $table Table of the database
 	 *
 	 * @return string 'CREATE TABLE' statement
 	 */
@@ -276,14 +276,20 @@ class com_dw_donationsInstallerScript
 		{
 			$fields = $table->children();
 
-			$fields_definitions = array();
-			$indexes            = array();
+			$fields_definitions = array ();
+			$indexes            = array ();
 
 			$db = JFactory::getDbo();
 
 			foreach ($fields as $field)
 			{
-				$fields_definitions[] = $this->generateColumnDeclaration($field);
+				$field_definition = $this->generateColumnDeclaration($field);
+
+				if ($field_definition !== false)
+				{
+					$fields_definitions[] = $field_definition;
+				}
+
 
 				if ($field['index'] == 'index')
 				{
@@ -313,7 +319,7 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Generate a column declaration
 	 *
-	 * @param   SimpleXMLElement  $field  Field data
+	 * @param   SimpleXMLElement $field Field data
 	 *
 	 * @return string Column declaration
 	 */
@@ -323,27 +329,32 @@ class com_dw_donationsInstallerScript
 		$col_name  = $db->quoteName((string) $field['field_name']);
 		$data_type = $this->getFieldType($field);
 
-		$default_value = (isset($field['default'])) ? 'DEFAULT ' . $field['default'] : '';
-
-		$other_data = '';
-
-		if (isset($field['is_autoincrement']) && $field['is_autoincrement'] == 1)
+		if ($data_type !== false)
 		{
-			$other_data .= ' AUTO_INCREMENT';
+			$default_value = (isset($field['default'])) ? 'DEFAULT ' . $field['default'] : '';
+
+			$other_data = '';
+
+			if (isset($field['is_autoincrement']) && $field['is_autoincrement'] == 1)
+			{
+				$other_data .= ' AUTO_INCREMENT';
+			}
+
+			$comment_value = (isset($field['description'])) ? 'COMMENT ' . $db->quote((string) $field['description']) : '';
+
+			return JText::sprintf(
+				'%s %s NOT NULL %s %s %s', $col_name, $data_type,
+				$default_value, $other_data, $comment_value
+			);
 		}
 
-		$comment_value = (isset($field['description'])) ? 'COMMENT ' . $db->quote((string) $field['description']) : '';
-
-		return JText::sprintf(
-			'%s %s NOT NULL %s %s %s', $col_name, $data_type,
-			$default_value, $other_data, $comment_value
-		);
+		return false;
 	}
 
 	/**
 	 * Generates SQL field type of a field.
 	 *
-	 * @param   SimpleXMLElement  $field  Field information
+	 * @param   SimpleXMLElement $field Field information
 	 *
 	 * @return string SQL data type
 	 */
@@ -356,19 +367,24 @@ class com_dw_donationsInstallerScript
 			$data_type .= '(' . ((string) $field['field_length']) . ')';
 		}
 
+		if (empty($data_type))
+		{
+			return false;
+		}
+
 		return (string) $data_type;
 	}
 
 	/**
 	 * Check if a SQL type allows length values.
 	 *
-	 * @param   string  $field_type  SQL type
+	 * @param   string $field_type SQL type
 	 *
 	 * @return boolean True if it allows length values, false if it does not.
 	 */
 	private function allowsLengthField($field_type)
 	{
-		$allow_length = array(
+		$allow_length = array (
 			'INT', 'VARCHAR', 'CHAR',
 			'TINYINT', 'SMALLINT', 'MEDIUMINT',
 			'INTEGER', 'BIGINT', 'FLOAT',
@@ -381,8 +397,8 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Updates all the fields related to a table.
 	 *
-	 * @param   JApplicationCms   $app    Application Object
-	 * @param   SimpleXMLElement  $table  Table information.
+	 * @param   JApplicationCms  $app   Application Object
+	 * @param   SimpleXMLElement $table Table information.
 	 *
 	 * @return void
 	 */
@@ -400,9 +416,9 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Process a certain field.
 	 *
-	 * @param   JApplicationCms   $app         Application object
-	 * @param   string            $table_name  The name of the table that contains the field.
-	 * @param   SimpleXMLElement  $field       Field Information.
+	 * @param   JApplicationCms  $app        Application object
+	 * @param   string           $table_name The name of the table that contains the field.
+	 * @param   SimpleXMLElement $field      Field Information.
 	 *
 	 * @return void
 	 */
@@ -457,7 +473,7 @@ class com_dw_donationsInstallerScript
 									JText::sprintf('Field `%s` has been successfully modified', $field['old_name'])
 								);
 							}
-							catch ( Exception $ex )
+							catch (Exception $ex)
 							{
 								$app->enqueueMessage(
 									JText::sprintf(
@@ -535,13 +551,13 @@ class com_dw_donationsInstallerScript
 								JText::sprintf('Field `%s` has been successfully deleted', $field['field_name'])
 							);
 						}
-						catch ( Exception $ex )
+						catch (Exception $ex)
 						{
 							$app->enqueueMessage(
 								JText::sprintf(
 									'There was an error deleting the field `%s`. Error: %s',
-								$field['field_name'],
-								$ex->getMessage()
+									$field['field_name'],
+									$ex->getMessage()
 								), 'error'
 							);
 						}
@@ -578,8 +594,8 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Add a field if it does not exists or modify it if it does.
 	 *
-	 * @param   string            $table_name  Table name
-	 * @param   SimpleXMLElement  $field       Field Information
+	 * @param   string           $table_name Table name
+	 * @param   SimpleXMLElement $field      Field Information
 	 *
 	 * @return mixed Constant on success(self::$MODIFIED | self::$NOT_MODIFIED), error message if an error occurred
 	 */
@@ -614,7 +630,7 @@ class com_dw_donationsInstallerScript
 
 				return MODIFIED;
 			}
-			catch ( Exception $ex )
+			catch (Exception $ex)
 			{
 				return $ex->getMessage();
 			}
@@ -626,8 +642,8 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Checks if a field exists on a table
 	 *
-	 * @param   string  $table_name  Table name
-	 * @param   string  $field_name  Field name
+	 * @param   string $table_name Table name
+	 * @param   string $field_name Field name
 	 *
 	 * @return boolean True if exists, false if it do
 	 */
@@ -641,8 +657,8 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Check if a field needs to be updated.
 	 *
-	 * @param   string            $table_name  Table name
-	 * @param   SimpleXMLElement  $field       Field information
+	 * @param   string           $table_name Table name
+	 * @param   SimpleXMLElement $field      Field information
 	 *
 	 * @return boolean True if the field has to be updated, false otherwise
 	 */
@@ -670,8 +686,8 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Generates an change column statement
 	 *
-	 * @param   string            $table_name  Table name
-	 * @param   SimpleXMLElement  $field       Field Information
+	 * @param   string           $table_name Table name
+	 * @param   SimpleXMLElement $field      Field Information
 	 *
 	 * @return string Change column statement
 	 */
@@ -685,8 +701,8 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Generates an add column statement
 	 *
-	 * @param   string            $table_name  Table name
-	 * @param   SimpleXMLElement  $field       Field Information
+	 * @param   string           $table_name Table name
+	 * @param   SimpleXMLElement $field      Field Information
 	 *
 	 * @return string Add column statement
 	 */
@@ -700,7 +716,7 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Installs plugins for this component
 	 *
-	 * @param   mixed  $parent  Object who called the install/update method
+	 * @param   mixed $parent Object who called the install/update method
 	 *
 	 * @return void
 	 */
@@ -748,7 +764,7 @@ class com_dw_donationsInstallerScript
 					->update('#__extensions')
 					->set('enabled = 1')
 					->where(
-						array(
+						array (
 							'type LIKE ' . $db->quote('plugin'),
 							'element LIKE ' . $db->quote($pluginName),
 							'folder LIKE ' . $db->quote($pluginGroup)
@@ -763,9 +779,9 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Check if an extension is already installed in the system
 	 *
-	 * @param   string  $type    Extension type
-	 * @param   string  $name    Extension name
-	 * @param   mixed   $folder  Extension folder(for plugins)
+	 * @param   string $type   Extension type
+	 * @param   string $name   Extension name
+	 * @param   mixed  $folder Extension folder(for plugins)
 	 *
 	 * @return boolean
 	 */
@@ -789,7 +805,7 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Installs plugins for this component
 	 *
-	 * @param   mixed  $parent  Object who called the install/update method
+	 * @param   mixed $parent Object who called the install/update method
 	 *
 	 * @return void
 	 */
@@ -836,7 +852,7 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Method to update the component
 	 *
-	 * @param   mixed  $parent  Object who called this method.
+	 * @param   mixed $parent Object who called this method.
 	 *
 	 * @return void
 	 */
@@ -850,7 +866,7 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Method to uninstall the component
 	 *
-	 * @param   mixed  $parent  Object who called this method.
+	 * @param   mixed $parent Object who called this method.
 	 *
 	 * @return void
 	 */
@@ -863,7 +879,7 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Uninstalls plugins
 	 *
-	 * @param   mixed  $parent  Object who called the uninstall method
+	 * @param   mixed $parent Object who called the uninstall method
 	 *
 	 * @return void
 	 */
@@ -886,7 +902,7 @@ class com_dw_donationsInstallerScript
 					->select('extension_id')
 					->from('#__extensions')
 					->where(
-						array(
+						array (
 							'type LIKE ' . $db->quote('plugin'),
 							'element LIKE ' . $db->quote($pluginName),
 							'folder LIKE ' . $db->quote($pluginGroup)
@@ -917,7 +933,7 @@ class com_dw_donationsInstallerScript
 	/**
 	 * Uninstalls plugins
 	 *
-	 * @param   mixed  $parent  Object who called the uninstall method
+	 * @param   mixed $parent Object who called the uninstall method
 	 *
 	 * @return void
 	 */
@@ -942,7 +958,7 @@ class com_dw_donationsInstallerScript
 						->select('extension_id')
 						->from('#__extensions')
 						->where(
-							array(
+							array (
 								'type LIKE ' . $db->quote('module'),
 								'element LIKE ' . $db->quote($moduleName)
 							)

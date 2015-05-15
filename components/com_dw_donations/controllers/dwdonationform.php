@@ -56,9 +56,14 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 		//Set some optional parameters
 		$AllowRecurring = 'false'; // This flag will prompt the customer to accept recurring payments in tbe future.
 		$RequestLang = 'el-GR'; //This will display the payment page in English (default language is Greek)
-		$ExpirationDate=date(DATE_ISO8601,strtotime("+ 5 days"));
 		
-		$postargs = 'Amount='.urlencode($Amount).'&AllowRecurring='.$AllowRecurring.'&RequestLang='.$RequestLang.'&SourceCode='.$SourceCode.'&FullName='.$donation['fname'].' '.$donation['lname'].'&Email='.$donation['email'].'&PaymentTimeOut=10800';
+		$postargs = 'Amount='.urlencode($Amount);
+		$postargs .= '&AllowRecurring='.$AllowRecurring;
+		$postargs .= '&RequestLang='.$RequestLang;
+		$postargs .= '&SourceCode='.$SourceCode;
+		$postargs .= '&FullName='.$donation['fname'].' '.$donation['lname'];
+		$postargs .= '&Email='.$donation['email'];
+		$postargs .= '&PaymentTimeOut=10800';
 		
 		// Get the curl session object
 		$session = curl_init($request);

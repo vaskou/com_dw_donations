@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.0" method="upgrade">
     <name>com_dw_donations</name>
-    <creationDate>2015-03-03</creationDate>
+    <creationDate>2015-05-15</creationDate>
     <copyright>Copyright (C) 2014. All rights reserved.</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <author>Charalampos Kaklamanos</author>
     <authorEmail>dev.yesinternet@gmail.com</authorEmail>
     <authorUrl>http://www.yesinternet.gr</authorUrl>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <description></description>
     
     <scriptfile>script.php</scriptfile>

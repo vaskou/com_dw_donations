@@ -11,8 +11,8 @@ $user = JFactory::getUser();
 <div class="uk-panel">
 	<div class="uk-grid">
 		<div class="uk-width-2-6">
-        	<a class="uk-thumbnail" href="<?php echo $link;?>" target="_blank" style="text-decoration:none !important;" title="<?php echo JText::_('COM_DW_DONATIONS_LIST_VIEW_PROFILE');?>" data-uk-tooltip>
-				<img class="ngo_avatar" src="<?php echo $displayData['ngo_avatar'];?>" alt="<?php echo $displayData['ngo_name']; ?>" title="<?php echo $displayData['ngo_name']; ?>">
+        	<a class="ngo-thumbnail" href="<?php echo $link;?>" target="_blank" style="text-decoration:none !important;" title="<?php echo JText::_('COM_DW_DONATIONS_LIST_VIEW_PROFILE');?>" data-uk-tooltip>
+				<img class="ngo_avatar uk-thumbnail uk-border-circle" src="<?php echo $displayData['ngo_avatar'];?>" alt="<?php echo $displayData['ngo_name']; ?>" title="<?php echo $displayData['ngo_name']; ?>">
             </a>
 		</div>
 		<div class="uk-width-4-6">

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     1.0.0
+ * @version     1.1.0
  * @package     com_dw_donations
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 
 JHtml::_('behavior.keepalive');
 JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidator');
+JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
 
 //Load admin language file
@@ -32,7 +32,29 @@ $canState = JFactory::getUser()->authorise('core.edit.state','com_dw_donations')
 ?>
 </style>
 <script type="text/javascript">
-    getScript('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js', function() {
+    if (jQuery === 'undefined') {
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            jQuery('#form-donation').submit(function(event) {
+                
+            });
+
+            
+			jQuery('input:hidden.donor_id').each(function(){
+				var name = jQuery(this).attr('name');
+				if(name.indexOf('donor_idhidden')){
+					jQuery('#jform_donor_id option[value="' + jQuery(this).val() + '"]').attr('selected', 'selected');
+				}
+			});
+					jQuery("#jform_donor_id").trigger("liszt:updated");
+			jQuery('input:hidden.beneficiary_id').each(function(){
+				var name = jQuery(this).attr('name');
+				if(name.indexOf('beneficiary_idhidden')){
+					jQuery('#jform_beneficiary_id option[value="' + jQuery(this).val() + '"]').attr('selected', 'selected');
+				}
+			});
+					jQuery("#jform_beneficiary_id").trigger("liszt:updated");
+        });
+    } else {
         jQuery(document).ready(function() {
             jQuery('#form-donation').submit(function(event) {
                 
@@ -54,8 +76,7 @@ $canState = JFactory::getUser()->authorise('core.edit.state','com_dw_donations')
 			});
 					jQuery("#jform_beneficiary_id").trigger("liszt:updated");
         });
-    });
-
+    }
 </script>
 
 <div class="donation-edit front-end-edit">
@@ -131,6 +152,10 @@ $canState = JFactory::getUser()->authorise('core.edit.state','com_dw_donations')
 	<div class="control-group">
 		<div class="control-label"><?php echo $this->form->getLabel('anonymous'); ?></div>
 		<div class="controls"><?php echo $this->form->getInput('anonymous'); ?></div>
+	</div>
+	<div class="control-group">
+		<div class="control-label"><?php echo $this->form->getLabel('payment_method'); ?></div>
+		<div class="controls"><?php echo $this->form->getInput('payment_method'); ?></div>
 	</div>
 	<div class="control-group">
 		<div class="control-label"><?php echo $this->form->getLabel('order_code'); ?></div>

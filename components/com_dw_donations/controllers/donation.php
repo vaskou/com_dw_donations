@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     1.0.0
+ * @version     1.1.0
  * @package     com_dw_donations
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -27,7 +27,7 @@ class Dw_donationsControllerDonation extends Dw_donationsController {
 
         // Get the previous edit id (if any) and the current edit id.
         $previousId = (int) $app->getUserState('com_dw_donations.edit.donation.id');
-        $editId = JFactory::getApplication()->input->getInt('id', null, 'array');
+        $editId = $app->input->getInt('id', null, 'array');
 
         // Set the user id for the user to edit in the session.
         $app->setUserState('com_dw_donations.edit.donation.id', $editId);
@@ -86,7 +86,12 @@ class Dw_donationsControllerDonation extends Dw_donationsController {
             $this->setMessage(JText::_('COM_DW_DONATIONS_ITEM_SAVED_SUCCESSFULLY'));
             $menu = & JSite::getMenu();
             $item = $menu->getActive();
-            $this->setRedirect(JRoute::_($item->link, false));
+            if (!$item) {
+                // If there isn't any menu item active, redirect to list view
+                $this->setRedirect(JRoute::_('index.php?option=com_dw_donations&view=donations', false));
+            } else {
+                $this->setRedirect(JRoute::_($item->link . $menuitemid, false));
+            }
         } else {
             throw new Exception(500);
         }

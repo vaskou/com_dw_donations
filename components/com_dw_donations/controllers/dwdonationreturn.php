@@ -82,9 +82,7 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 		$dispatcher	= JEventDispatcher::getInstance();
 		$dispatcher->trigger( 'onDonationSuccess' , array( &$payment ) );
 		
-		$menu = JFactory::getApplication()->getMenu();
-		$item = $menu->getActive();
-		$url = (empty($item->link) ? 'index.php?option=com_dw_donations&view=dwdonationsuccess' : $item->link);
+		$url = 'index.php?option=com_dw_donations&view=dwdonationsuccess' ;
 		$app->setUserState('com_dw_donations.payment.data', json_encode($payment));
 		$this->setRedirect(JRoute::_($url, false));
 

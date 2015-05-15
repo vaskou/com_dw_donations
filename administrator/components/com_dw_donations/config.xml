@@ -10,11 +10,21 @@
                 
             menu_published="0"
             filter="raw"
-            multiple="true" />
-			<field name="viva_url" type="URL"            
-            	label="COM_DW_DONATIONS_FORM_LBL_VIVA_URL"
-	            description="COM_DW_DONATIONS_FORM_DESC_VIVA_URL" 
-			 />
+            multiple="true" />      <field name="viva_url" type="text"
+                
+            label="COM_DW_DONATIONS_FORM_LBL_VIVA_URL"
+            description="COM_DW_DONATIONS_FORM_DESC_VIVA_URL" 
+                 default="http://demo.vivapayments.com" 
+                
+                
+            filter="url" />      <field name="payment_timeout" type="text"
+                
+            label="COM_DW_DONATIONS_FORM_LBL_PAYMENT_TIMEOUT"
+            description="COM_DW_DONATIONS_FORM_DESC_PAYMENT_TIMEOUT" 
+                 default="30" 
+                
+                
+            filter="int" />
     </fieldset>
     <fieldset 
         name="permissions"
