@@ -24,6 +24,7 @@ $isPopup=( isset ( $displayData['isPopup'] ) ) ? $displayData['isPopup']  : fals
 	<?php echo $form->getInput('modified'); ?>
 	<?php echo $form->getInput('donor_id','',0); ?>
 	<?php echo $form->getInput('beneficiary_id','',$beneficiary['ngo_id']); ?>
+    <?php echo $form->getInput('payment_method'); ?>
 
 	<div class="uk-form-row uk-margin-top">
 		<div class="uk-form-controls uk-width-1-1 uk-form-icon">

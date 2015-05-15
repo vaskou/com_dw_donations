@@ -24,9 +24,15 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 		
         $payments = $this->getModel('DwDonationForm', 'Dw_donationsModel');
 		
+		$payment_data=$app->getUserState('com_dw_donations.payment.data');
+		if(!isset($payment_data)){
+			JError::raiseError(402, JText::_('JERROR_ALERTNOAUTHOR'));
+			return false;
+		}
+		
 		$transactionId=$jinput->get('t');
 		$orderCode=$jinput->get('s');
-		$transactionData=$this->fn_viva_request_authorization($transactionId);
+		$transactionData=$this->fn_viva_request_authorization($transactionId,$payment_data['beneficiary_id']);
 		
 		if(isset($transactionData['success'])){
 			$transOrderCode=$transactionData['success']->Transactions[0]->Order->OrderCode;
@@ -34,13 +40,6 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 				JError::raiseError(401, JText::_('JERROR_ALERTNOAUTHOR'));
 				return false;
 			}
-		}
-		
-		
-		$payment_data=$app->getUserState('com_dw_donations.payment.data');
-		if(!isset($payment_data)){
-			JError::raiseError(402, JText::_('JERROR_ALERTNOAUTHOR'));
-			return false;
 		}
 		
 		$order_code=array('order_code'=>$orderCode);
@@ -65,9 +64,7 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 					// ToDo: Error logging	
 				}
 			}else{
-				$menu = JFactory::getApplication()->getMenu();
-				$item = $menu->getActive();
-				$url = (empty($item->link) ? 'index.php?option=com_dw_donations&view=dwdonationsuccess' : $item->link);
+				$url = 'index.php?option=com_dw_donations&view=dwdonationsuccess' ;
 				$app->setUserState('com_dw_donations.payment.data', json_encode($payment));
 				$this->setRedirect(JRoute::_($url, false));
 				return false;
@@ -88,14 +85,16 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 
 	}
 	
-	private function fn_viva_request_authorization($transactionId)
+	private function fn_viva_request_authorization($transactionId,$beneficiary_id)
 	{
 		
 		$request =  VIVA_URL.'/api/transactions/';	
 		
+		$beneficiary = CFactory::getUser($beneficiary_id);
+		
 		// Your merchant ID and API Key can be found in the 'Security' settings on your profile.
-		$MerchantId = '1ef183eb-94de-44dd-b682-3c404f74a267';
-		$APIKey = 'vivavaskou';
+		$MerchantId = $beneficiary->getInfo('FIELD_NGO_VIVA_MERCHANTID');
+		$APIKey = $beneficiary->getInfo('FIELD_NGO_VIVA_APIKEY');
 		//Set the ID of the Initial Transaction
 		$request .= $transactionId;
 		
