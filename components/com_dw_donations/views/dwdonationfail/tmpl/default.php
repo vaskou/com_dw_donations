@@ -18,6 +18,8 @@ $app = Jfactory::getApplication();
 $payment=$app->getUserState('com_dw_donations.payment.data');
 
 //$session = JFactory::getSession();
-var_dump($payment);
+//var_dump($payment);
 
 ?>
+
+<h1>Αποτυχία</h1>

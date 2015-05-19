@@ -51,11 +51,12 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 		$SourceCode = $beneficiary->getInfo('FIELD_NGO_VIVA_SOURCECODE');
 		
 		//Set the Payment Amount
-		$Amount = $donation['amount'].'00';	// Amount in cents
+		$Amount = intval( $donation['amount'] ) * 100;	// Amount in cents
 		
 		//Set some optional parameters
 		$AllowRecurring = 'false'; // This flag will prompt the customer to accept recurring payments in tbe future.
 		$RequestLang = 'el-GR'; //This will display the payment page in English (default language is Greek)
+		$PaymentTimeOut = intval( JComponentHelper::getParams('com_dw_donations')->get('payment_timeout') ) * 24 * 60 * 60;
 		
 		$postargs = 'Amount='.urlencode($Amount);
 		$postargs .= '&AllowRecurring='.$AllowRecurring;
@@ -63,7 +64,8 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 		$postargs .= '&SourceCode='.$SourceCode;
 		$postargs .= '&FullName='.$donation['fname'].' '.$donation['lname'];
 		$postargs .= '&Email='.$donation['email'];
-		$postargs .= '&PaymentTimeOut=10800';
+		$postargs .= ($donation['payment_method']=='C')?'':'&PaymentTimeOut='.$PaymentTimeOut;
+		$postargs .= '&DisableIVR=true';
 		
 		// Get the curl session object
 		$session = curl_init($request);
