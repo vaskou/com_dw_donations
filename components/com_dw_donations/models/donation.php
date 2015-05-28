@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     1.0.0
+ * @version     1.1.0
  * @package     com_dw_donations
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -128,6 +128,7 @@ class Dw_donationsModelDonation extends JModelItem {
 
 			}
 					$this->_item->country = JText::_('COM_DW_DONATIONS_DONATIONS_COUNTRY_OPTION_' . $this->_item->country);
+					$this->_item->payment_method = JText::_('COM_DW_DONATIONS_DONATIONS_PAYMENT_METHOD_OPTION_' . $this->_item->payment_method);
 
         return $this->_item;
     }

@@ -24,6 +24,7 @@ $isPopup=( isset ( $displayData['isPopup'] ) ) ? $displayData['isPopup']  : fals
 	<?php echo $form->getInput('modified'); ?>
 	<?php echo $form->getInput('donor_id','',0); ?>
 	<?php echo $form->getInput('beneficiary_id','',$beneficiary['ngo_id']); ?>
+    <?php echo $form->getInput('payment_method'); ?>
 
 	<div class="uk-form-row uk-margin-top">
 		<div class="uk-form-controls uk-width-1-1 uk-form-icon">
@@ -117,7 +118,7 @@ $isPopup=( isset ( $displayData['isPopup'] ) ) ? $displayData['isPopup']  : fals
 
 <script type="text/javascript">
 	jQuery(document).ready(function($) {
-		var redirect_url="<?php echo  htmlspecialchars_decode("http://demo.vivapayments.com/web/newtransaction.aspx?ref="); ?>";
+		var redirect_url="<?php echo  htmlspecialchars_decode(VIVA_URL."/web/newtransaction.aspx?ref="); ?>";
 		var order_id="";//"<?php echo (JFactory::getConfig()->get("sef")==1)?"?":"&" ?>orderId=";
 		fn_ngo_donate_button_submit(redirect_url,order_id);
 		

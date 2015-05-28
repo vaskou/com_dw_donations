@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     1.0.0
+ * @version     1.1.0
  * @package     com_dw_donations
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -44,6 +44,7 @@ class Dw_donationsModelDwDonations extends JModelList
                 'amount', 'a.amount',
                 'country', 'a.country',
                 'anonymous', 'a.anonymous',
+                'payment_method', 'a.payment_method',
                 'order_code', 'a.order_code',
                 'transaction_id', 'a.transaction_id',
                 'parameters', 'a.parameters',
@@ -261,7 +262,7 @@ class Dw_donationsModelDwDonations extends JModelList
 
 		//Filtering donor_id
 		$filter_donor_id = $this->state->get("filter.donor_id");
-		if ($filter_donor_id) {
+		if ($filter_donor_id != '') {
 			$query->where("a.donor_id = '".$db->escape($filter_donor_id)."'");
 		}
 
@@ -281,6 +282,12 @@ class Dw_donationsModelDwDonations extends JModelList
 		$filter_anonymous = $this->state->get("filter.anonymous");
 		if ($filter_anonymous) {
 			$query->where("a.anonymous = '".$db->escape($filter_anonymous)."'");
+		}
+		
+		//Filtering payment_method
+		$filter_payment_method = $this->state->get("filter.payment_method");
+		if ($filter_payment_method != '') {
+			$query->where("a.payment_method = '".$db->escape($filter_payment_method)."'");
 		}
 
 		// Add the list ordering clause.

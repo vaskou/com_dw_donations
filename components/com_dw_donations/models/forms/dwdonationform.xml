@@ -63,6 +63,9 @@
             option_on="Yes"
             option_off="Yes" 
 			/>
+		<field name="payment_method" type="hidden" default="C" label="COM_DW_DONATIONS_FORM_LBL_DONATION_PAYMENT_METHOD"
+            readonly="true" class="readonly"
+            description="COM_DW_DONATIONS_FORM_DESC_DONATION_PAYMENT_METHOD" />
         <field name="order_code" type="hidden" size="40" class="inputbox"
             label="COM_DW_DONATIONS_FORM_LBL_DONATION_ORDER_CODE"
             description="COM_DW_DONATIONS_FORM_DESC_DONATION_ORDER_CODE" 

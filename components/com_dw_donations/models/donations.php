@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     1.0.0
+ * @version     1.1.0
  * @package     com_dw_donations
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -44,6 +44,7 @@ class Dw_donationsModelDonations extends JModelList
                 'amount', 'a.amount',
                 'country', 'a.country',
                 'anonymous', 'a.anonymous',
+                'payment_method', 'a.payment_method',
                 'order_code', 'a.order_code',
                 'transaction_id', 'a.transaction_id',
                 'parameters', 'a.parameters',
@@ -264,6 +265,12 @@ if (!JFactory::getUser()->authorise('core.edit.state', 'com_dw_donations'))
 			$query->where("a.country = '".$db->escape($filter_country)."'");
 		}
 
+		//Filtering payment_method
+		$filter_payment_method = $this->state->get("filter.payment_method");
+		if ($filter_payment_method != '') {
+			$query->where("a.payment_method = '".$db->escape($filter_payment_method)."'");
+		}
+
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
@@ -280,7 +287,48 @@ if (!JFactory::getUser()->authorise('core.edit.state', 'com_dw_donations'))
 		$items = parent::getItems();
 		foreach($items as $item){
 	
+
+			if (isset($item->donor_id)) {
+				$values = explode(',', $item->donor_id);
+
+				$textValue = array();
+				foreach ($values as $value){
+					if(!empty($value)){
+						$db = JFactory::getDbo();
+						$query = "SELECT id,name FROM #__users HAVING id LIKE '" . $value . "'";
+						$db->setQuery($query);
+						$results = $db->loadObject();
+						if ($results) {
+							$textValue[] = $results->name;
+						}
+					}
+				}
+
+			$item->donor_id = !empty($textValue) ? implode(', ', $textValue) : $item->donor_id;
+
+			}
+
+			if (isset($item->beneficiary_id)) {
+				$values = explode(',', $item->beneficiary_id);
+
+				$textValue = array();
+				foreach ($values as $value){
+					if(!empty($value)){
+						$db = JFactory::getDbo();
+						$query = "SELECT id,name FROM #__users HAVING id LIKE '" . $value . "'";
+						$db->setQuery($query);
+						$results = $db->loadObject();
+						if ($results) {
+							$textValue[] = $results->name;
+						}
+					}
+				}
+
+			$item->beneficiary_id = !empty($textValue) ? implode(', ', $textValue) : $item->beneficiary_id;
+
+			}
 					$item->country = JText::_('COM_DW_DONATIONS_DONATIONS_COUNTRY_OPTION_' . strtoupper($item->country));
+					$item->payment_method = JText::_('COM_DW_DONATIONS_DONATIONS_PAYMENT_METHOD_OPTION_' . strtoupper($item->payment_method));
 }
 
 		return $items;
@@ -305,7 +353,7 @@ if (!JFactory::getUser()->authorise('core.edit.state', 'com_dw_donations'))
 		}
 		if ($error_dateformat)
 		{
-			$app->enqueueMessage(JText::_("COM_PRUEBA_SEARCH_FILTER_DATE_FORMAT"), "warning");
+			$app->enqueueMessage(JText::_("COM_DW_DONATIONS_SEARCH_FILTER_DATE_FORMAT"), "warning");
 			$app->setUserState($this->context . '.filter', $filters);
 		}
 

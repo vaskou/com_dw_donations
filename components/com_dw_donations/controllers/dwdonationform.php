@@ -41,23 +41,31 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 			return false;
 		}
 
-		$request =  'http://demo.vivapayments.com/api/orders';	// demo environment URL
-		//$request =  'https://www.vivapayments.com/api/orders';	// production environment URL
+		$request =  VIVA_URL.'/api/orders';
+		
+		$beneficiary = CFactory::getUser($form_data['beneficiary_id']);
 		
 		// Your merchant ID and API Key can be found in the 'Security' settings on your profile.
-		$MerchantId = '1ef183eb-94de-44dd-b682-3c404f74a267';
-		$APIKey = 'vivavaskou'; 	
+		$MerchantId = $beneficiary->getInfo('FIELD_NGO_VIVA_MERCHANTID');
+		$APIKey = $beneficiary->getInfo('FIELD_NGO_VIVA_APIKEY');
+		$SourceCode = $beneficiary->getInfo('FIELD_NGO_VIVA_SOURCECODE');
 		
 		//Set the Payment Amount
-		$Amount = $donation['amount'].'00';	// Amount in cents
+		$Amount = intval( $donation['amount'] ) * 100;	// Amount in cents
 		
-		//Set some optional parameters (Full list available here: https://github.com/VivaPayments/API/wiki/Optional-Parameters)
+		//Set some optional parameters
 		$AllowRecurring = 'false'; // This flag will prompt the customer to accept recurring payments in tbe future.
 		$RequestLang = 'el-GR'; //This will display the payment page in English (default language is Greek)
-		$SourceCode=8222;
-		$ExpirationDate=date(DATE_ISO8601,strtotime("+ 5 days"));
+		$PaymentTimeOut = intval( JComponentHelper::getParams('com_dw_donations')->get('payment_timeout') ) * 24 * 60 * 60;
 		
-		$postargs = 'Amount='.urlencode($Amount).'&AllowRecurring='.$AllowRecurring.'&RequestLang='.$RequestLang.'&SourceCode='.$SourceCode.'&FullName='.$donation['fname'].' '.$donation['lname'].'&Email='.$donation['email'].'&PaymentTimeOut=10800';
+		$postargs = 'Amount='.urlencode($Amount);
+		$postargs .= '&AllowRecurring='.$AllowRecurring;
+		$postargs .= '&RequestLang='.$RequestLang;
+		$postargs .= '&SourceCode='.$SourceCode;
+		$postargs .= '&FullName='.$donation['fname'].' '.$donation['lname'];
+		$postargs .= '&Email='.$donation['email'];
+		$postargs .= ($donation['payment_method']=='C')?'':'&PaymentTimeOut='.$PaymentTimeOut;
+		$postargs .= '&DisableIVR=true';
 		
 		// Get the curl session object
 		$session = curl_init($request);
@@ -82,12 +90,14 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 				throw new Exception("Result is not a json object");
 			}
 		} catch( Exception $e ) {
-			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('error'=>array('error_text'=>$e->getMessage()),'params'=>$params));
+			JLog::add($e->getMessage(), JLog::WARNING, 'donate');
+			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('error'=>array('error_text'=>JText::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST')),'params'=>$params));
 			return false;
 		}
 		
 		if(!isset($resultObj->ErrorCode)){
-			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('error'=>array('error_text'=>$response),'params'=>$params));
+			JLog::add($response, JLog::WARNING, 'donate');
+			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('error'=>array('error_text'=>JText::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST')),'params'=>$params));
 			return false;
 		}
 		
@@ -121,7 +131,8 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('orderId'=>$orderId,'params'=>$params));
 			return false;
 		}else{
-			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('error'=>array('error_text'=>$resultObj->ErrorText),'params'=>$params));
+			JLog::add($resultObj->ErrorText, JLog::WARNING, 'donate');
+			echo JLayoutHelper::render('dwdonationform.donation_redirect',array('error'=>array('error_text'=>JText::_('JERROR_LAYOUT_ERROR_HAS_OCCURRED_WHILE_PROCESSING_YOUR_REQUEST')),'params'=>$params));
 			return false;
 		}
 	}

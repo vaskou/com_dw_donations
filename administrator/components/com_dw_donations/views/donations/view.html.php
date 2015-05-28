@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     1.0.0
+ * @version     1.1.0
  * @package     com_dw_donations
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -119,17 +119,21 @@ class Dw_donationsViewDonations extends JViewLegacy {
 		);
 
 			//Filter for the field created
+		$this->extra_sidebar .= '<div class="other-filters">';
 			$this->extra_sidebar .= '<small><label for="filter_from_created">'. JText::sprintf('COM_DW_DONATIONS_FROM_FILTER', 'Created') .'</label></small>';
 			$this->extra_sidebar .= JHtml::_('calendar', $this->state->get('filter.created.from'), 'filter_from_created', 'filter_from_created', '%Y-%m-%d', array('style' => 'width:142px;', 'onchange' => 'this.form.submit();'));
 			$this->extra_sidebar .= '<small><label for="filter_to_created">'. JText::sprintf('COM_DW_DONATIONS_TO_FILTER', 'Created') .'</label></small>';
 			$this->extra_sidebar .= JHtml::_('calendar', $this->state->get('filter.created.to'), 'filter_to_created', 'filter_to_created', '%Y-%m-%d', array('style' => 'width:142px;', 'onchange'=> 'this.form.submit();'));
+		$this->extra_sidebar .= '</div>';
 			$this->extra_sidebar .= '<hr class="hr-condensed">';
 
 			//Filter for the field modified
+		$this->extra_sidebar .= '<div class="other-filters">';
 			$this->extra_sidebar .= '<small><label for="filter_from_modified">'. JText::sprintf('COM_DW_DONATIONS_FROM_FILTER', 'Modified') .'</label></small>';
 			$this->extra_sidebar .= JHtml::_('calendar', $this->state->get('filter.modified.from'), 'filter_from_modified', 'filter_from_modified', '%Y-%m-%d', array('style' => 'width:142px;', 'onchange' => 'this.form.submit();'));
 			$this->extra_sidebar .= '<small><label for="filter_to_modified">'. JText::sprintf('COM_DW_DONATIONS_TO_FILTER', 'Modified') .'</label></small>';
 			$this->extra_sidebar .= JHtml::_('calendar', $this->state->get('filter.modified.to'), 'filter_to_modified', 'filter_to_modified', '%Y-%m-%d', array('style' => 'width:142px;', 'onchange'=> 'this.form.submit();'));
+		$this->extra_sidebar .= '</div>';
 			$this->extra_sidebar .= '<hr class="hr-condensed">';
 
 		//Filter for the field country
@@ -888,6 +892,24 @@ class Dw_donationsViewDonations extends JViewLegacy {
 			JHtml::_('select.options', $options , "value", "text", $this->state->get('filter.country'), true)
 		);
 
+		//Filter for the field payment_method
+		$select_label = JText::sprintf('COM_DW_DONATIONS_FILTER_SELECT_LABEL', 'Payment Method');
+		$options = array();
+		$options[0] = new stdClass();
+		$options[0]->value = "C";
+		$options[0]->text = "Card Payment";
+		$options[1] = new stdClass();
+		$options[1]->value = "D";
+		$options[1]->text = "Dias Payment";
+		$options[2] = new stdClass();
+		$options[2]->value = "V";
+		$options[2]->text = "Viva Spot Payment";
+		JHtmlSidebar::addFilter(
+			$select_label,
+			'filter_payment_method',
+			JHtml::_('select.options', $options , "value", "text", $this->state->get('filter.payment_method'), true)
+		);
+
     }
 
 	protected function getSortFields()
@@ -907,6 +929,7 @@ class Dw_donationsViewDonations extends JViewLegacy {
 		'a.amount' => JText::_('COM_DW_DONATIONS_DONATIONS_AMOUNT'),
 		'a.country' => JText::_('COM_DW_DONATIONS_DONATIONS_COUNTRY'),
 		'a.anonymous' => JText::_('COM_DW_DONATIONS_DONATIONS_ANONYMOUS'),
+		'a.payment_method' => JText::_('COM_DW_DONATIONS_DONATIONS_PAYMENT_METHOD'),
 		'a.order_code' => JText::_('COM_DW_DONATIONS_DONATIONS_ORDER_CODE'),
 		'a.transaction_id' => JText::_('COM_DW_DONATIONS_DONATIONS_TRANSACTION_ID'),
 		'a.parameters' => JText::_('COM_DW_DONATIONS_DONATIONS_PARAMETERS'),

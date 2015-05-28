@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS `#__dw_donations` (
 `amount` VARCHAR(10)  NOT NULL ,
 `country` VARCHAR(255)  NOT NULL ,
 `anonymous` VARCHAR(255)  NOT NULL ,
+`payment_method` VARCHAR(255)  NOT NULL ,
 `order_code` BIGINT(20)  NOT NULL ,
 `transaction_id` VARCHAR(255)  NOT NULL ,
 `parameters` TEXT NOT NULL ,

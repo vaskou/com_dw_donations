@@ -257,6 +257,14 @@
 		<option value="ZA">COM_DW_DONATIONS_DONATIONS_COUNTRY_OPTION_ZA</option>
 		<option value="ZM">COM_DW_DONATIONS_DONATIONS_COUNTRY_OPTION_ZM</option>
 		<option value="ZW">COM_DW_DONATIONS_DONATIONS_COUNTRY_OPTION_ZW</option>
+		</field> 
+
+ 
+		<field name="payment_method" type="list" onchange="this.form.submit();">
+		<option value="">COM_DW_DONATIONS_DONATIONS_PAYMENT_METHOD_FILTER</option>
+		<option value="C">COM_DW_DONATIONS_DONATIONS_PAYMENT_METHOD_OPTION_C</option>
+		<option value="D">COM_DW_DONATIONS_DONATIONS_PAYMENT_METHOD_OPTION_D</option>
+		<option value="V">COM_DW_DONATIONS_DONATIONS_PAYMENT_METHOD_OPTION_V</option>
 		</field>
 
     </fields>

@@ -84,12 +84,12 @@ function fn_toggle_redirect_message()
 	jQuery(".payment-step-2,.payment-step-3").toggleClass('uk-hidden');
 }
 
-function fn_ngo_donate_button_click(ngo_id,custom_url,ngo_url)
+function fn_ngo_donate_button_click(ngo_id,custom_url,plus,ngo_url)
 {
 	fn_url_change(custom_url);
 	jQuery("#jform_beneficiary_id").val(ngo_id);
 	
-	jQuery(".ngo_info .uk-thumbnail").attr("href",ngo_url+"&userid="+ngo_id);
+	jQuery(".ngo_info .ngo-thumbnail").attr("href",ngo_url+plus+"userid="+ngo_id);
 	
 	var image=jQuery(".ngo-row[data-benef-id='"+ngo_id+"'] .list-img img").clone();
 	jQuery(".ngo_info .ngo_avatar").replaceWith(image);
@@ -119,6 +119,7 @@ function fn_url_change(data)
 {
 	if ( window.history.pushState ) {
 		window.history.pushState({}, null, data);
+		window.history.pushed=true;
 	}else{	
 		window.location = data;
 	}
@@ -128,8 +129,10 @@ function fn_onpopstate()
 {
 	var popped = false;
 	var initialURL = location.href;
+	window.history.pushed=false;
 	jQuery(window).bind('popstate', function(event) {
-		var initialPop = !popped && location.href == initialURL;
+		var initialPop = !popped && location.href == initialURL && !window.history.pushed;
+		
 		popped = true;
 		if ( !initialPop ) {
 			window.location.reload();
@@ -223,7 +226,7 @@ function fn_moneydonationwizard_init(current_url,plus,isPopup,ngo_url)
 		var benef_id=jQuery(this).data('benef-id');
 		formData = form.serialize();
 		var custom_url=current_url+plus+'beneficiary_id='+benef_id;
-		fn_ngo_donate_button_click(benef_id,custom_url,ngo_url);
+		fn_ngo_donate_button_click(benef_id,custom_url,plus,ngo_url);
 	});
 	
 	jQuery('.payment-step-back').click(function(){

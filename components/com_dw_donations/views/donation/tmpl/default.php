@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     1.0.0
+ * @version     1.1.0
  * @package     com_dw_donations
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -70,6 +70,10 @@ if (!$canEdit && JFactory::getUser()->authorise('core.edit.own', 'com_dw_donatio
 <tr>
 			<th><?php echo JText::_('COM_DW_DONATIONS_FORM_LBL_DONATION_ANONYMOUS'); ?></th>
 			<td><?php echo $this->item->anonymous; ?></td>
+</tr>
+<tr>
+			<th><?php echo JText::_('COM_DW_DONATIONS_FORM_LBL_DONATION_PAYMENT_METHOD'); ?></th>
+			<td><?php echo $this->item->payment_method; ?></td>
 </tr>
 <tr>
 			<th><?php echo JText::_('COM_DW_DONATIONS_FORM_LBL_DONATION_ORDER_CODE'); ?></th>

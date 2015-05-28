@@ -112,15 +112,17 @@ class DwDonationsHelper {
 		$cols=array();
 		$rows=array();
 		
-		foreach($data as $k=>$v){
-			$year=$v->year;
-			$date='Date('.$v->year.','.($v->month - 1).','.$v->day.')';
-			$rows[]=array(
-				'c'=>array(					
-					array('v'=>$date),
-					array('v'=>$v->total_amount)
-				)
-			);
+		if(!empty($data)){
+			foreach($data as $k=>$v){
+				$year=$v->year;
+				$date='Date('.$v->year.','.($v->month - 1).','.$v->day.')';
+				$rows[]=array(
+					'c'=>array(					
+						array('v'=>$date),
+						array('v'=>$v->total_amount)
+					)
+				);
+			}
 		}
 		
 		$cols=array(

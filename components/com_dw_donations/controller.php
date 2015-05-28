@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     1.0.0
+ * @version     1.1.0
  * @package     com_dw_donations
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -10,6 +10,19 @@
 // No direct access
 defined('_JEXEC') or die;
 define('COMPONENT_PATH','/components/com_dw_donations');
+
+$viva_url = JComponentHelper::getParams('com_dw_donations')->get('viva_url');
+define('VIVA_URL',$viva_url);
+
+jimport('joomla.log.log');
+JLog::addLogger(
+	array(
+		'text_file' => 'com_dw_donations.errors.php',
+		'text_file_path' => 'logs'
+	),
+	JLog::ALL,
+	array('donate','get_response')
+);
 
 jimport('joomla.application.component.controller');
 include_once JPATH_ROOT.'/components/com_community/libraries/core.php';

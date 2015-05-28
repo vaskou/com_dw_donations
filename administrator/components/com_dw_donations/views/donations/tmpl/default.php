@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     1.0.0
+ * @version     1.1.0
  * @package     com_dw_donations
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -151,6 +151,9 @@ if (!empty($this->extra_sidebar)) {
 				<?php echo JHtml::_('grid.sort',  'COM_DW_DONATIONS_DONATIONS_ANONYMOUS', 'a.anonymous', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
+				<?php echo JHtml::_('grid.sort',  'COM_DW_DONATIONS_DONATIONS_PAYMENT_METHOD', 'a.payment_method', $listDirn, $listOrder); ?>
+				</th>
+				<th class='left'>
 				<?php echo JHtml::_('grid.sort',  'COM_DW_DONATIONS_DONATIONS_ORDER_CODE', 'a.order_code', $listDirn, $listOrder); ?>
 				</th>
 				<th class='left'>
@@ -275,6 +278,10 @@ if (!empty($this->extra_sidebar)) {
 				<td>
 
 					<?php echo $item->anonymous; ?>
+				</td>
+				<td>
+
+					<?php echo $item->payment_method; ?>
 				</td>
 				<td>
 

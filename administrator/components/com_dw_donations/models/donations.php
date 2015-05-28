@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     1.0.0
+ * @version     1.1.0
  * @package     com_dw_donations
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -40,6 +40,7 @@ class Dw_donationsModelDonations extends JModelList {
                 'amount', 'a.amount',
                 'country', 'a.country',
                 'anonymous', 'a.anonymous',
+                'payment_method', 'a.payment_method',
                 'order_code', 'a.order_code',
                 'transaction_id', 'a.transaction_id',
                 'parameters', 'a.parameters',
@@ -84,6 +85,9 @@ class Dw_donationsModelDonations extends JModelList {
 
 		//Filtering country
 		$this->setState('filter.country', $app->getUserStateFromRequest($this->context.'.filter.country', 'filter_country', '', 'string'));
+
+		//Filtering payment_method
+		$this->setState('filter.payment_method', $app->getUserStateFromRequest($this->context.'.filter.payment_method', 'filter_payment_method', '', 'string'));
 
 
         // Load the parameters.
@@ -190,6 +194,12 @@ class Dw_donationsModelDonations extends JModelList {
 			$query->where("a.country = '".$db->escape($filter_country)."'");
 		}
 
+		//Filtering payment_method
+		$filter_payment_method = $this->state->get("filter.payment_method");
+		if ($filter_payment_method != '') {
+			$query->where("a.payment_method = '".$db->escape($filter_payment_method)."'");
+		}
+
 
         // Add the list ordering clause.
         $orderCol = $this->state->get('list.ordering');
@@ -246,6 +256,7 @@ class Dw_donationsModelDonations extends JModelList {
 
 			}
 					$oneItem->country = JText::_('COM_DW_DONATIONS_DONATIONS_COUNTRY_OPTION_' . strtoupper($oneItem->country));
+					$oneItem->payment_method = JText::_('COM_DW_DONATIONS_DONATIONS_PAYMENT_METHOD_OPTION_' . strtoupper($oneItem->payment_method));
 		}
         return $items;
     }

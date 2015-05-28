@@ -594,6 +594,30 @@
             option_on="Yes"
             option_off="Yes" /> 
 
+       <field name="payment_method" type="radio"
+                
+            label="COM_DW_DONATIONS_FORM_LBL_DONATION_PAYMENT_METHOD"
+            description="COM_DW_DONATIONS_FORM_DESC_DONATION_PAYMENT_METHOD" 
+                 default="C" 
+                
+                
+            menu_published="0"
+            filter="raw"
+            option_on="Yes"
+            option_off="Yes">
+                <option value="C">Card Payment</option>
+                <option value="D">Dias Payment</option>
+                <option value="V">Viva Spot Payment</option>
+        </field> 
+
+ 
+		<field name="filter_payment_method" type="list" onchange="this.form.submit();">
+			<option value="">COM_DW_DONATIONS_DONATIONS_PAYMENT_METHOD_FILTER</option>
+			<option value="C">Card Payment</option>
+			<option value="D">Dias Payment</option>
+			<option value="V">Viva Spot Payment</option>
+		</field> 
+
        <field name="order_code" type="text" size="40" class="inputbox"
         
             label="COM_DW_DONATIONS_FORM_LBL_DONATION_ORDER_CODE"
