@@ -119,6 +119,7 @@ function fn_url_change(data)
 {
 	if ( window.history.pushState ) {
 		window.history.pushState({}, null, data);
+		window.history.pushed=true;
 	}else{	
 		window.location = data;
 	}
@@ -128,8 +129,10 @@ function fn_onpopstate()
 {
 	var popped = false;
 	var initialURL = location.href;
+	window.history.pushed=false;
 	jQuery(window).bind('popstate', function(event) {
-		var initialPop = !popped && location.href == initialURL;
+		var initialPop = !popped && location.href == initialURL && !window.history.pushed;
+		
 		popped = true;
 		if ( !initialPop ) {
 			window.location.reload();

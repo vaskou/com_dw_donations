@@ -24,28 +24,37 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 		
         $payments = $this->getModel('DwDonationForm', 'Dw_donationsModel');
 		
-		$payment_data=$app->getUserState('com_dw_donations.payment.data');
-		if(!isset($payment_data)){
-			JError::raiseError(402, JText::_('JERROR_ALERTNOAUTHOR'));
+		$donation_data=$app->getUserState('com_dw_donations.donation.data');
+		if(!isset($donation_data)){
+			JError::raiseError(400, JText::_('JERROR_ALERTNOAUTHOR'));
 			return false;
 		}
 		
 		$transactionId=$jinput->get('t');
 		$orderCode=$jinput->get('s');
-		$transactionData=$this->fn_viva_request_authorization($transactionId,$payment_data['beneficiary_id']);
+		$transactionData=$this->fn_viva_request_authorization($transactionId,$donation_data['beneficiary_id']);
 		
 		if(isset($transactionData['success'])){
 			$transOrderCode=$transactionData['success']->Transactions[0]->Order->OrderCode;
 			if($orderCode!=$transOrderCode){
-				JError::raiseError(401, JText::_('JERROR_ALERTNOAUTHOR'));
+				$error_message = 'Wrong OrderCode '.$orderCode;
+				JLog::add($error_message, JLog::WARNING, 'get_response');
+				JError::raiseError(400, JText::_('JERROR_ALERTNOAUTHOR'));
 				return false;
 			}
+		}else{
+			$error_message= ( isset($transactionData['error']) )? $transactionData['error'] : 'Wrong TransactionID '.$transactionId;
+			JLog::add($error_message, JLog::WARNING, 'get_response');
+			JError::raiseError(400, JText::_('JERROR_ALERTNOAUTHOR'));
+			return false;
 		}
 		
 		$order_code=array('order_code'=>$orderCode);
-		if($order_code['order_code']!=$payment_data['order_code'])
+		if($order_code['order_code']!=$donation_data['order_code'])
 		{
-			JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+			$error_message = 'Wrong Session OrderCode '.$orderCode;
+			JLog::add($error_message, JLog::WARNING, 'get_response');
+			JError::raiseError(400, JText::_('JERROR_ALERTNOAUTHOR'));
 			return false;	
 		}
 		
@@ -61,20 +70,19 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 				$data['anonymous']=$payment->anonymous;
 				$return=$payments->save($data);
 				if ($return === false) {
-					// ToDo: Error logging	
+					// ToDo: Error logging
+					$error_message='Payment not saved: PaymentID='.$payment->id.' | OrderCode='.$payment->order_code.' | TransactionID='.$transactionId.' | Modified'.$time_updated;
+					JLog::add($error_message, JLog::WARNING, 'get_response');	
 				}
-			}else{
-				$url = 'index.php?option=com_dw_donations&view=dwdonationsuccess' ;
-				$app->setUserState('com_dw_donations.payment.data', json_encode($payment));
-				$this->setRedirect(JRoute::_($url, false));
-				return false;
 			}
 		}else{
 			// ToDo: Error logging
+			$error_message='Payment could not load from table: PaymentID='.$payment->id.' | OrderCode='.$payment->order_code.' | TransactionID='.$transactionId.' | Modified'.$time_updated;
+			JLog::add($error_message, JLog::WARNING, 'get_response');
 		}
 		
 		
-		//Notify Donor and Beneficiary about the payment success --------------------------------------------------------------------
+		/*Notify Donor and Beneficiary about the payment success --------------------------------------------------------------------*/
 		JPluginHelper::importPlugin('donorwiz');
 		$dispatcher	= JEventDispatcher::getInstance();
 		$dispatcher->trigger( 'onDonationSuccess' , array( &$payment ) );
@@ -103,7 +111,11 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 		// Set query data here with the URL
 		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($session, CURLOPT_USERPWD, $MerchantId.':'.$APIKey);
+		curl_setopt($session, CURLOPT_CONNECTTIMEOUT, 10); 
 		$response = curl_exec($session);
+		if($c_error=curl_error($session)){
+			$response='{"Message":"'.$c_error.' TransactionID='.$transactionId.'"}';
+		}
 		curl_close($session);
 		
 		// Parse the JSON response
@@ -113,12 +125,15 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 			return array('error'=>$e->getMessage());	
 		}
 		
-		if ($resultObj->ErrorCode==0){
-			// print JSON output
-			return array('success'=>$resultObj);
-		}
-		else{
-			return array('error'=>$resultObj->ErrorText);
+		if ( isset($resultObj->ErrorCode) ){
+			if ($resultObj->ErrorCode === 0){
+				return array('success'=>$resultObj);
+			}
+			else{
+				return array('error'=>$resultObj->ErrorText);
+			}
+		}else{
+			return array('error'=>$resultObj->Message);
 		}
 	
 	}

@@ -21,7 +21,7 @@ JLog::addLogger(
 		'text_file_path' => 'logs'
 	),
 	JLog::ALL,
-	array('donate')
+	array('donate','get_response')
 );
 
 jimport('joomla.application.component.controller');
