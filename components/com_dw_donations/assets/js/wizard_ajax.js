@@ -1,35 +1,3 @@
-function fn_ajax_controller_calls(func,format,request)
-{
-	return jQuery.ajax({
-		url	: 'index.php?option=com_dw_donations&task=dwdonationform.'+func+'&format='+format,
-		type   : 'POST',
-		data   : request,
-		success: function (response) {
-			//console.log(response);
-			try{
-				response=jQuery.parseJSON(response);
-				//console.log(response);
-				var n_options={status:"danger",timeout:2000,pos:"top-center"};
-				if(response.success){
-					if(response.data.ngo_info.html){
-						jQuery('.ngo_info').html(response.data.ngo_info.html);
-						jQuery('.donate-btn-beneficiary').text(response.data.ngo_info.ngo_data.ngo_name);				
-					}
-				}else{
-					jQuery.UIkit.notify(response.message,n_options);
-				}
-			}catch(e){
-				//console.log(e);
-				document.open();
-				document.write(response);
-				document.close();
-			}
-		},
-		error: function(response) {
-			console.log(response.responseText);
-		}
-	});
-}
 
 function fn_ngo_donate_button_submit(redirect_url,order_id)
 {
@@ -66,9 +34,11 @@ function fn_ngo_donate_button_submit(redirect_url,order_id)
 					}
 				}catch(e){
 					//console.log(e);
-					document.open();
+					/*document.open();
 					document.write(response);
-					document.close();
+					document.close();*/
+					jQuery.UIkit.notify(response,n_options);
+					fn_toggle_redirect_message();
 				}
 			},
 			error:function(jqXHR, textStatus, errorThrown){
