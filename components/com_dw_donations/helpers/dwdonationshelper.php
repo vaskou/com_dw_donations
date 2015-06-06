@@ -111,6 +111,7 @@ class DwDonationsHelper {
 		
 		$cols=array();
 		$rows=array();
+		$year='';
 		
 		if(!empty($data)){
 			foreach($data as $k=>$v){

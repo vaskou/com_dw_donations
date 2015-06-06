@@ -11,9 +11,25 @@ $user = JFactory::getUser();
 <div class="uk-panel">
 	<div class="uk-grid">
 		<div class="uk-width-2-6">
-        	<a class="ngo-thumbnail" href="<?php echo $link;?>" target="_blank" style="text-decoration:none !important;" title="<?php echo JText::_('COM_DW_DONATIONS_LIST_VIEW_PROFILE');?>" data-uk-tooltip>
-				<img class="ngo_avatar uk-thumbnail uk-border-circle" src="<?php echo $displayData['ngo_avatar'];?>" alt="<?php echo $displayData['ngo_name']; ?>" title="<?php echo $displayData['ngo_name']; ?>">
-            </a>
+				<img class="ngo_avatar uk-thumbnail uk-border-circle" src="<?php echo $displayData['ngo_avatar'];?>" alt="<?php echo $displayData['ngo_name']; ?>" title="<?php echo $displayData['ngo_name']; ?>"> 
+            	<div class="dw-profile-link">
+				<?php echo JLayoutHelper::render(
+                	'popup-button',
+	                array (
+    		            'isAjax' => true,
+            		    'buttonLink' => JRoute::_('index.php?option=com_donorwiz&view=login&Itemid=314&mode=register&return='.base64_encode(JFactory::getURI()->toString()).'&'. JSession::getFormToken() .'=1'),
+		                'buttonText' => JText::_('COM_DONORWIZ_PROFILE'),
+        		        'buttonIcon' => '',
+                		'buttonType' => 'uk-hidden-small uk-button uk-button-link',
+		                'layoutPath' => JPATH_ROOT .'/components/com_donorwiz/layouts',
+        		        'layoutName' => 'user.info',
+                		'layoutParams' => array( 'beneficiary_id' => $displayData['ngo_id'] , 'isPopup'=>true ),
+		                'scripts'=>array(Juri::base() . 'media/com_donorwiz/js/registration.js')
+        	        ),
+            	    JPATH_ROOT .'/components/com_donorwiz/layouts/popup' ,
+                	null );
+                ?>
+                </div>
 		</div>
 		<div class="uk-width-4-6">
 			<div class="uk-text-large uk-text-right">

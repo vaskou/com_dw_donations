@@ -31,7 +31,7 @@ $avatarUrl = $user->getThumbAvatar();
 
 <div class="uk-text-center">
 	<h1><?php echo JText::_('COM_DW_DONATIONS_SUCCESS_THANKS').' '. $name; ?></h1>
-	<img class="uk-thumbnail" src="<?php echo $avatarUrl; ?>">
+	<img class="uk-thumbnail uk-border-circle" src="<?php echo $avatarUrl; ?>">
     <div class="uk-thumbnail-caption"><a href="<?php echo $link; ?>"><?php echo JText::_('COM_DW_DONATIONS_SUCCESS_VIEW_PROFILE').' '.$name; ?> </a></div>
     <?php 
 		if($payment->donor_id==0){
