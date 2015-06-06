@@ -17,9 +17,31 @@ $doc = JFactory::getDocument();
 $app = Jfactory::getApplication();
 $payment=$app->getUserState('com_dw_donations.payment.data');
 
-//$session = JFactory::getSession();
-//var_dump($payment);
+if(isset($payment)){
+	$payment=json_decode($payment);
+}
+
+$user  = CFactory::getUser( $payment->beneficiary_id );
+$name = $user->getDisplayName();
+$link = CRoute::_('index.php?option=com_community&view=profile&userid='.$payment->beneficiary_id);
+$donation_link = JRoute::_('index.php?option=com_dw_donations&view=dwdonationform&beneficiary_id='.$payment->beneficiary_id);
+$avatarUrl = $user->getThumbAvatar();
+
 
 ?>
 
-<h1>Αποτυχία</h1>
+<div class="uk-text-center">
+	<h1><?php echo JText::_('COM_DW_DONATIONS_FAIL'); ?></h1>
+	<img class="uk-thumbnail uk-border-circle" src="<?php echo $avatarUrl; ?>">
+    <div class="uk-thumbnail-caption">
+    	<a href="<?php echo $donation_link; ?>"><?php echo JText::_('COM_DW_DONATIONS_FAIL_NEW_DONATION').' '.$name; ?> </a><br/>
+    	<a href="<?php echo $link; ?>"><?php echo JText::_('COM_DW_DONATIONS_SUCCESS_VIEW_PROFILE').' '.$name; ?> </a>
+    </div>
+    <?php 
+		if($payment->donor_id==0){
+	    	echo '<div>';
+			echo '	<a href="'.JRoute::_('index.php?option=com_donorwiz&view=login&Itemid=314&mode=register').'">'.JText::_('JREGISTER').'</a>';
+			echo '</div>';
+		}
+    ?>
+</div>
