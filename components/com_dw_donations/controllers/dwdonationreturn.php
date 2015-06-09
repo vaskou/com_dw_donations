@@ -58,7 +58,7 @@ class Dw_donationsControllerDwDonationReturn extends Dw_donationsController {
 			return false;	
 		}
 		
-		$time_updated = JFactory::getDate()->toSql();
+		$time_updated = JFactory::getDate( 'now', JFactory::getConfig()->get("offset") )->toSql(true);
 		$payment = $payments->getTable();
 		if($payment->load($order_code)){
 			//var_dump($payment);
