@@ -7,6 +7,20 @@ $total=$displayData['total'];
 
 ?>
 
+<div class="uk-align-right uk-margin-small-top">
+<?php echo JLayoutHelper::render( 
+	'export.items', 
+	array ( 
+		'items' => $items , 
+		'component' => 'com_dw_donations' , 
+		'fields' => 'id,fname,lname,email,amount,created,order_code' ,
+		'filename' => 'donorwiz_donations_'.JFactory::getUser() -> name.'_'.JFactory::getDate()->format('d M Y') 
+	) , 
+	JPATH_ROOT .'/components/com_donorwiz/layouts' , 
+	null 
+); ?>
+</div>
+
 <h1>
 
 <?php if (count($items)) :?>
