@@ -47,13 +47,13 @@ class Dw_donationsTabledonation extends JTable
 		if($array['id'] == 0){
 			$array['created_by'] = JFactory::getUser()->id;
 		}
-		if($array['id'] == 0){
+		/*if($array['id'] == 0){
 			$array['created'] = JFactory::getDate()->toSql();
 		}
 		$task = JFactory::getApplication()->input->get('task');
 		if($task == 'apply' || $task == 'save'){
 			$array['modified'] = JFactory::getDate()->toSql();
-		}
+		}*/
 
 		//Support for multiple SQL field: donor_id
 			if(isset($array['donor_id'])){
