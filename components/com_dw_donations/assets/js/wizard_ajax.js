@@ -71,6 +71,7 @@ function fn_ngo_donate_button_click(ngo_id,custom_url,plus,ngo_url)
 	jQuery(".payment-step-1").slideToggle(1000);
 	jQuery(".payment-step-2").slideToggle(1000);
 	jQuery("body,html").animate({scrollTop :0}, 1000,function(){ });
+
 }
 
 function fn_ajax_loader()
@@ -140,7 +141,7 @@ function fn_pagination_click(data,form)
 	});
 }
 
-function fn_moneydonationwizard_init(current_url,plus,isPopup,ngo_url)
+function fn_moneydonationwizard_init(current_url,plus,isPopup,ngo_url,notifications)
 {
 	var form = jQuery('#form-moneydonation-filters');
 	var formData;
@@ -163,6 +164,9 @@ function fn_moneydonationwizard_init(current_url,plus,isPopup,ngo_url)
 			var values_ngoActionArea=jQuery('#ngo_actionarea_list').val();
 			ngoList.filter(function(item) {
 				return (item.values().ngoObjective.indexOf(values_ngoObjective,0)>-1 || values_ngoObjective==0) && (item.values().ngoActionArea==values_ngoActionArea || values_ngoActionArea==0)
+			});
+			ngoList.on('updated',function(){
+				fn_ngo_row_click();
 			});
 			
 		}
@@ -192,16 +196,23 @@ function fn_moneydonationwizard_init(current_url,plus,isPopup,ngo_url)
 		ngoList.sort(stype,{order:jQuery(this).val()});
 	})
 	
-	jQuery('.ngo-row').click(function(){
-		var benef_id=jQuery(this).data('benef-id');
-		formData = form.serialize();
-		var custom_url=current_url+plus+'beneficiary_id='+benef_id;
-		fn_ngo_donate_button_click(benef_id,custom_url,plus,ngo_url);
-	});
+	function fn_ngo_row_click(){
+		jQuery('.ngo-row').unbind('click');
+		jQuery('.ngo-row').click(function(){
+			var benef_id=jQuery(this).data('benef-id');
+			formData = form.serialize();
+			var custom_url=current_url+plus+'beneficiary_id='+benef_id;
+			fn_ngo_donate_button_click(benef_id,custom_url,plus,ngo_url);
+			UIkit.notify.closeAll();
+			UIkit.notify(notifications[1] , { pos:'bottom-right' , timeout : 20000} );
+		});
+	}
 	
 	jQuery('.payment-step-back').click(function(){
 		formData = form.serialize();
 		fn_url_change(current_url+plus+formData);
+		UIkit.notify.closeAll();
+		UIkit.notify(notifications[0] , { pos:'bottom-right' , timeout : 20000} );
 	});
 	
 	//fn_ajax_loader();

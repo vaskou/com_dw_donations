@@ -62,7 +62,7 @@ class Dw_donationsControllerDwDonationForm extends Dw_donationsController {
 		$postargs .= '&AllowRecurring='.$AllowRecurring;
 		$postargs .= '&RequestLang='.$RequestLang;
 		$postargs .= '&SourceCode='.$SourceCode;
-		$postargs .= '&FullName='.$donation['fname'].' '.$donation['lname'];
+		//$postargs .= '&FullName='.$donation['fname'].' '.$donation['lname'];
 		$postargs .= '&Email='.$donation['email'];
 		$postargs .= ($donation['payment_method']=='C')?'':'&PaymentTimeOut='.$PaymentTimeOut;
 		$postargs .= '&DisableIVR=true';

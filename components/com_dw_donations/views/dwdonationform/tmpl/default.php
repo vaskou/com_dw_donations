@@ -113,10 +113,20 @@ jQuery(function($){
 	var plus='<?php echo (JFactory::getConfig()->get('sef')==1)?'?':'&' ?>';
 	var current_url='<?php echo  htmlspecialchars_decode(JRoute::_("index.php?option=com_dw_donations&view=dwdonationform",false)); ?>';
 	var ngo_url='<?php echo htmlspecialchars_decode(CRoute::_('index.php?option=com_community&view=profile'));?>';
-	fn_moneydonationwizard_init(current_url,plus,<?php echo $isPopup;?>,ngo_url);
+	var notifications=[
+		"<div class='uk-text-center'><i class='uk-icon-smile-o uk-icon-large uk-display-block uk-margin-small'></i><?php echo JText::_('COM_DW_DONATIONS_FORM_NOTIFY_SELECT_BENEFICIARY'); ?></div>",
+		"<div class='uk-text-center'><i class='uk-icon-smile-o uk-icon-large uk-display-block uk-margin-small'></i><?php echo JText::_('COM_DW_DONATIONS_FORM_NOTIFY_DONATE_BENEFICIARY'); ?></div>"
+	];
+	fn_moneydonationwizard_init(current_url,plus,<?php echo $isPopup;?>,ngo_url,notifications);
 	
-	UIkit.notify("<div class='uk-text-center'><i class='uk-icon-smile-o uk-icon-large uk-display-block uk-margin-small'></i><?php echo JText::_('COM_DW_DONATIONS_FORM_NOTIFY_SELECT_BENEFICIARY'); ?></div>" , { pos:'bottom-right' , timeout : 20000} );
-	UIkit.notify("<div class='uk-text-center'><i class='uk-icon-smile-o uk-icon-large uk-display-block uk-margin-small'></i><?php echo JText::_('COM_DW_DONATIONS_FORM_NOTIFY_DONATE_BENEFICIARY'); ?></div>" , { pos:'bottom-right' , timeout : 20000} );
+	<?php 
+	if($beneficiary_id=='')
+	{
+		echo "UIkit.notify( notifications[0], { pos:'bottom-right' , timeout : 20000} )";
+	}else{
+		echo "UIkit.notify( notifications[1], { pos:'bottom-right' , timeout : 20000} )";
+	}
+	?>
 	
 });
 
