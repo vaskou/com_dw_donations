@@ -165,6 +165,9 @@ function fn_moneydonationwizard_init(current_url,plus,isPopup,ngo_url,notificati
 			ngoList.filter(function(item) {
 				return (item.values().ngoObjective.indexOf(values_ngoObjective,0)>-1 || values_ngoObjective==0) && (item.values().ngoActionArea==values_ngoActionArea || values_ngoActionArea==0)
 			});
+			ngoList.on('updated',function(){
+				fn_ngo_row_click();
+			});
 			
 		}
 		updateList();
@@ -193,14 +196,17 @@ function fn_moneydonationwizard_init(current_url,plus,isPopup,ngo_url,notificati
 		ngoList.sort(stype,{order:jQuery(this).val()});
 	})
 	
-	jQuery('.ngo-row').click(function(){
-		var benef_id=jQuery(this).data('benef-id');
-		formData = form.serialize();
-		var custom_url=current_url+plus+'beneficiary_id='+benef_id;
-		fn_ngo_donate_button_click(benef_id,custom_url,plus,ngo_url);
-		UIkit.notify.closeAll();
-		UIkit.notify(notifications[1] , { pos:'bottom-right' , timeout : 20000} );
-	});
+	function fn_ngo_row_click(){
+		jQuery('.ngo-row').unbind('click');
+		jQuery('.ngo-row').click(function(){
+			var benef_id=jQuery(this).data('benef-id');
+			formData = form.serialize();
+			var custom_url=current_url+plus+'beneficiary_id='+benef_id;
+			fn_ngo_donate_button_click(benef_id,custom_url,plus,ngo_url);
+			UIkit.notify.closeAll();
+			UIkit.notify(notifications[1] , { pos:'bottom-right' , timeout : 20000} );
+		});
+	}
 	
 	jQuery('.payment-step-back').click(function(){
 		formData = form.serialize();
