@@ -39,3 +39,12 @@ input[type=number] {
   -o-user-select: none;
   user-select: none; 
 }
+
+/* Donate button*/
+.donate-btn-beneficiary{
+	width: 65%;
+	text-align: left;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}

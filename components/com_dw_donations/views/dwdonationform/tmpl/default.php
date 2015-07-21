@@ -122,9 +122,9 @@ jQuery(function($){
 	<?php 
 	if($beneficiary_id=='')
 	{
-		echo "UIkit.notify( notifications[0], { pos:'bottom-right' , timeout : 20000} )";
+		echo "UIkit.notify( notifications[0], { pos:'bottom-right' , timeout : 5000} )";
 	}else{
-		echo "UIkit.notify( notifications[1], { pos:'bottom-right' , timeout : 20000} )";
+		echo "UIkit.notify( notifications[1], { pos:'bottom-right' , timeout : 5000} )";
 	}
 	?>
 	

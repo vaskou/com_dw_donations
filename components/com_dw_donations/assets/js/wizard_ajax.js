@@ -1,4 +1,3 @@
-
 function fn_ngo_donate_button_submit(redirect_url,order_id)
 {
 	jQuery("#form-moneydonation").submit(function(event) {
@@ -191,6 +190,8 @@ function fn_moneydonationwizard_init(current_url,plus,isPopup,ngo_url,notificati
 	
 	fn_update_donate_button();
 	
+	fn_ngo_row_click();
+	
 	jQuery('#ngo_sort_filter').change(function(){
 		var stype=jQuery(this).find('option:selected').data('stype');
 		ngoList.sort(stype,{order:jQuery(this).val()});
@@ -204,7 +205,7 @@ function fn_moneydonationwizard_init(current_url,plus,isPopup,ngo_url,notificati
 			var custom_url=current_url+plus+'beneficiary_id='+benef_id;
 			fn_ngo_donate_button_click(benef_id,custom_url,plus,ngo_url);
 			UIkit.notify.closeAll();
-			UIkit.notify(notifications[1] , { pos:'bottom-right' , timeout : 20000} );
+			UIkit.notify(notifications[1] , { pos:'bottom-right' , timeout : 5000} );
 		});
 	}
 	
@@ -212,10 +213,14 @@ function fn_moneydonationwizard_init(current_url,plus,isPopup,ngo_url,notificati
 		formData = form.serialize();
 		fn_url_change(current_url+plus+formData);
 		UIkit.notify.closeAll();
-		UIkit.notify(notifications[0] , { pos:'bottom-right' , timeout : 20000} );
+		UIkit.notify(notifications[0] , { pos:'bottom-right' , timeout : 5000} );
 	});
 	
 	//fn_ajax_loader();
 	
-	jQuery('a[data-lightbox]').lightbox();
+	try{
+		jQuery('a[data-lightbox]').lightbox();
+	}catch(ex){
+		$widgetkit.load('/media/widgetkit/widgets/lightbox/js/lightbox.js').done(function(){jQuery('a[data-lightbox]').lightbox()});
+	}
 }
