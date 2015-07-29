@@ -9,7 +9,7 @@
  */
 // No direct access
 defined('_JEXEC') or die;
-include_once JPATH_ROOT.'/components/com_community/libraries/core.php';
+
 /**
  * @param	array	A named array
  * @return	array
@@ -22,19 +22,12 @@ function Dw_donationsBuildRoute(&$query) {
         unset($query['task']);
     }
     if (isset($query['view'])) {
-       // $segments[] = $query['view'];
+        $segments[] = $query['view'];
         unset($query['view']);
     }
     if (isset($query['id'])) {
         $segments[] = $query['id'];
         unset($query['id']);
-    }
-	if (isset($query['beneficiary_id'])) {
-		
-		$user=CFactory::getUser($query['beneficiary_id']);
-		
-        $segments[] = $user->_alias;//$query['beneficiary_id'];
-        unset($query['beneficiary_id']);
     }
 
     return $segments;
@@ -55,8 +48,6 @@ function Dw_donationsParseRoute($segments) {
 
     // view is always the first element of the array
     $vars['view'] = array_shift($segments);
-	$alias=array_pop($segments);
-	$vars['beneficiary_id'] = getUserIdByAlias($alias);
 
     while (!empty($segments)) {
         $segment = array_pop($segments);
@@ -68,18 +59,4 @@ function Dw_donationsParseRoute($segments) {
     }
 
     return $vars;
-}
-
-function getUserIdByAlias($alias)
-{
-	$db = JFactory::getDBO();
-	
-	$query="SELECT userid,alias FROM #__community_users WHERE alias='".$alias."'";
-
-    $db->setQuery($query);
-    $db->Query();
-
-    $id = $db->loadResult();
-	
-	return $id;
 }

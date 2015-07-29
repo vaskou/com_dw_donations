@@ -29,6 +29,7 @@ class DwDonationFormHelper {
 			$data_array[$ngo->id]['ngo_actionarea']=$data_actionarea;
 			$data_array[$ngo->id]['ngo_avatar']=$data_avatar;
 			$data_array[$ngo->id]['ngo_priority']=$data_priority;
+			$data_array[$ngo->id]['ngo_alias']=$cuser->_alias;
 			
 			/*$sort_name[$ngo->id]=$ngo->name;
 			$sort_priority[$ngo->id]=$data_priority;*/
