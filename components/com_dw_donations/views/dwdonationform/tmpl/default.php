@@ -27,7 +27,14 @@ $jinput = JFactory::getApplication()->input;
 $page=$jinput->get('page',0);
 
 $isPopup=$jinput->get('isPopup',0,'BOOLEAN');
-
+if(!$isPopup){
+	$menus=$app->getMenu();
+	$menu=$menus->getActive();
+	if(isset($menu)){
+		$isPopup=$menu->params->get('isPopup');
+	}
+}
+		var_dump($isPopup);
 $ngos_array=$this->ngos_array;
 
 $donor_user = JFactory::getUser();
@@ -81,8 +88,7 @@ $donation_form_params=array(
 	'session_donation_data'=>$session_donation_data,
 	'isPopup'=>$isPopup
 );
-
-
+		
 ?>
 
 <div class="uk-grid">
@@ -112,12 +118,12 @@ jQuery(function($){
 	
 	var plus='<?php echo (JFactory::getConfig()->get('sef')==1)?'?':'&' ?>';
 	var current_url='<?php echo  htmlspecialchars_decode(JRoute::_("index.php?option=com_dw_donations&view=dwdonationform",false)); ?>';
-	var ngo_url='<?php echo htmlspecialchars_decode(CRoute::_('index.php?option=com_community&view=profile'));?>';
+	//var ngo_url='<?php echo htmlspecialchars_decode(CRoute::_('index.php?option=com_community&view=profile'));?>';
 	var notifications=[
 		"<div class='uk-text-center'><i class='uk-icon-smile-o uk-icon-large uk-display-block uk-margin-small'></i><?php echo JText::_('COM_DW_DONATIONS_FORM_NOTIFY_SELECT_BENEFICIARY'); ?></div>",
 		"<div class='uk-text-center'><i class='uk-icon-smile-o uk-icon-large uk-display-block uk-margin-small'></i><?php echo JText::_('COM_DW_DONATIONS_FORM_NOTIFY_DONATE_BENEFICIARY'); ?></div>"
 	];
-	fn_moneydonationwizard_init(current_url,plus,<?php echo $isPopup;?>,ngo_url,notifications);
+	fn_moneydonationwizard_init(current_url,plus,<?php echo $isPopup;?>,notifications);
 	
 	<?php 
 	if($beneficiary_id=='')

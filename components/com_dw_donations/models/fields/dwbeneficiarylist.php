@@ -46,14 +46,18 @@ class JFormFieldDwBeneficiaryList extends JFormField
 			}
 			$html[]='</select>';
 			
-			/*$html[]='<script>';
+			$html[]='<script>';
 			$html[]='jQuery(function($){
 				link="index.php?option=com_dw_donations&view=dwdonationform";
 				$("#'.$this->id.'").change(function(){
-					$("#jform_link").val(link+"&beneficiary_id="+$(this).val())
+					if($(this).val()!=="0"){
+						$("#jform_link").val(link+"&beneficiary_id="+$(this).val());
+					}else{
+						$("#jform_link").val(link);
+					}
 				});
 			});';
-			$html[]='</script>';*/
+			$html[]='</script>';
 		}
         
 		return implode($html);

@@ -8,7 +8,10 @@ $ngos=$displayData['ngo_list'];
 
 <?php foreach($ngos as $id=>$ngo) : ?>
 
-<li class="ngo-row uk-panel uk-panel-box uk-panel-blank" data-benef-id="<?php echo $id;?>">
+<li class="ngo-row uk-panel uk-panel-box uk-panel-blank" 
+	data-benef-id="<?php echo $id;?>" 
+	data-benef-url="<?php echo JRoute::_("index.php?option=com_dw_donations&view=dwdonationform&beneficiary_id=".$id)?>" 
+    data-prof-url="<?php echo CUrlHelper::userLink($id);?>" >
     
 	<div class="uk-grid uk-margin-small">
     

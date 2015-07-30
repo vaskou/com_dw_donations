@@ -53,12 +53,12 @@ function fn_toggle_redirect_message()
 	jQuery(".payment-step-2,.payment-step-3").toggleClass('uk-hidden');
 }
 
-function fn_ngo_donate_button_click(ngo_id,custom_url,plus,ngo_url)
+function fn_ngo_donate_button_click(ngo_id,custom_url,ngo_url)
 {
 	fn_url_change(custom_url);
 	jQuery("#jform_beneficiary_id").val(ngo_id);
 	
-	jQuery(".ngo_info .ngo-thumbnail").attr("href",ngo_url+plus+"userid="+ngo_id);
+	jQuery(".ngo_info .ngo-thumbnail").attr("href",ngo_url);
 	
 	var image=jQuery(".ngo-row[data-benef-id='"+ngo_id+"'] .list-img img").clone();
 	jQuery(".ngo_info .ngo_avatar").replaceWith(image);
@@ -140,7 +140,7 @@ function fn_pagination_click(data,form)
 	});
 }
 
-function fn_moneydonationwizard_init(current_url,plus,isPopup,ngo_url,notifications)
+function fn_moneydonationwizard_init(current_url,plus,isPopup,notifications)
 {
 	var form = jQuery('#form-moneydonation-filters');
 	var formData;
@@ -201,9 +201,11 @@ function fn_moneydonationwizard_init(current_url,plus,isPopup,ngo_url,notificati
 		jQuery('.ngo-row').unbind('click');
 		jQuery('.ngo-row').click(function(){
 			var benef_id=jQuery(this).data('benef-id');
+			var benef_url=jQuery(this).data('benef-url');
+			var ngo_url=jQuery(this).data('prof-url');
 			formData = form.serialize();
-			var custom_url=current_url+plus+'beneficiary_id='+benef_id;
-			fn_ngo_donate_button_click(benef_id,custom_url,plus,ngo_url);
+			//var custom_url=current_url+plus+'beneficiary_id='+benef_id;
+			fn_ngo_donate_button_click(benef_id,benef_url,ngo_url);
 			UIkit.notify.closeAll();
 			UIkit.notify(notifications[1] , { pos:'bottom-right' , timeout : 5000} );
 		});

@@ -7,7 +7,8 @@
     </layout>
     <fields name="params">
         <fieldset name="basic" label="COM_DW_DONATIONS_FIELDSET_ITEM_ID_SELECT_LABEL" addfieldpath="/components/com_dw_donations/models/fields">
-			<field name="selected_ngo" type="dwbeneficiarylist" default="0" label="Select Beneficiary" description=""/>		
+			<field name="selected_ngo" type="dwbeneficiarylist" default="0" label="Select Beneficiary" description=""/>
+			<field name="isPopup" type="checkbox" label="Hide the return link" description="" value="1" />		
         </fieldset>
     </fields>
 </metadata>
